@@ -1,5 +1,5 @@
-# For information regarding the response structure of the XenoCanto API see:
-# https://xeno-canto.org/explore/api
+from typing import List, Dict, Any
+from src.cantopy.components.recording import Recording
 
 
 class QueryResult:
@@ -7,21 +7,21 @@ class QueryResult:
 
     Attributes
     ----------
-    numRecordings : int
+    num_recordings : int
         The total number of recordings found for this query.
-    numSpecies : int
+    num_species : int
         The total number of species found for this query.
     page : int
         The page number of the results page that is being displayed.
-    numPages : int
+    num_pages : int
         The total number of pages available for this query.
-    recordings : list
+    recordings : List[Recording]
         An array of recording objects containing detailed information about each recording.
 
     """
 
-    def __init__(self, query_response: dict):
-        """Create a QueryResult object form the XenoCanto json response
+    def __init__(self, query_response: Dict[str, Any]):
+        """Create a QueryResult object from the XenoCanto json response
 
         Parameters
         ----------
@@ -29,9 +29,10 @@ class QueryResult:
             The response from the XenoCanto API.
         """
 
-        # Extract all the information from the response
-        self.num_recordings = query_response["numRecording"]
-        self.num_species = query_response["numSpecies"]
-        self.page = query_response["page"]
-        self.num_pages = query_response["num_pages"]
-        self.recordings = query_response["recordings"]
+        self.num_recordings = int(query_response["numRecordings"])
+        self.num_species = int(query_response["numSpecies"])
+        self.page = int(query_response["page"])
+        self.num_pages = int(query_response["numPages"])
+        self.recordings: List[Recording] = []
+        for query_response_recording in query_response.get("recordings", []):
+            self.recordings.append(Recording(query_response_recording))

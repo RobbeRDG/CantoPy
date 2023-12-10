@@ -1,3 +1,8 @@
+from typing import Any, Dict
+
+from pandas import Timedelta, Timestamp
+
+
 class Recording:
     """
     Class representing a recording object.
@@ -26,7 +31,7 @@ class Recording:
         Latitude of the recording in decimal coordinates.
     lng : float
         Longitude of the recording in decimal coordinates.
-    type : str
+    song_type : str
         Sound type of the recording (combining both predefined terms such as 'call' or 'song'
         and additional free text options).
     sex : str
@@ -49,21 +54,16 @@ class Recording:
         URL describing the license of this recording.
     q : str
         Current quality rating for the recording.
-    length : float
-        Length of the recording in minutes.
-    time : str
-        Time of day that the recording was made.
-    date : str
-        Date that the recording was made.
+    length : Timedelta
+        Length of the recording in a timedelta.
+    time : Timestamp
+        Timestamp that the recording was made.
     uploaded : str
         Date that the recording was uploaded to xeno-canto.
     also : list
         An array with the identified background species in the recording.
     rmk : str
         Additional remarks by the recordist.
-    bird_seen : str
-        Despite the field name (which was kept to ensure backward compatibility),
-        this field indicates whether the recorded animal was seen.
     animal_seen : str
         Was the recorded animal seen?
     playback_used : str
@@ -78,11 +78,11 @@ class Recording:
         Recording device used.
     mic : str
         Microphone used.
-    smp : str
+    smp : int
         Sample rate.
     """
 
-    def __init__(self, recording_data: dict):
+    def __init__(self, recording_data: Dict[str, Any]):
         """Create a Recording object with a given recording dict returned from the XenoCanto API
 
         Parameters
@@ -90,8 +90,22 @@ class Recording:
         recording_data : dict
             The dict of the recording returned by the XenoCanto API
         """
+        # Extract the recording length from the given string represntation
+        length_in_minutes = recording_data["length"].split(":")
+        length = Timedelta(
+            minutes=int(length_in_minutes[0]), seconds=int(length_in_minutes[1])
+        )
 
-        self.id = recording_data["id"]
+        # Extract the full timestamp from the given string representation
+        recording_date = recording_data["date"]
+        recording_time = recording_data["time"]
+        timestamp = Timestamp(f"{recording_date}T{recording_time}")
+
+        # Extract the uploaded timestamp
+        uploaded = Timestamp(recording_data["uploaded"])
+
+        # Set the Recording object attributes
+        self.id = int(recording_data["id"])
         self.gen = recording_data["gen"]
         self.sp = recording_data["sp"]
         self.ssp = recording_data["ssp"]
@@ -100,31 +114,30 @@ class Recording:
         self.rec = recording_data["rec"]
         self.cnt = recording_data["cnt"]
         self.loc = recording_data["loc"]
-        self.lat = recording_data["lat"]
-        self.lng = recording_data["lng"]
-        self.type = recording_data["type"]
+        self.lat = float(recording_data["lat"])
+        self.lng = float(recording_data["lng"])
+        self.song_type = recording_data["type"]
         self.sex = recording_data["sex"]
         self.stage = recording_data["stage"]
         self.method = recording_data["method"]
         self.url = recording_data["url"]
         self.file = recording_data["file"]
-        self.file_name = recording_data["file_name"]
+        self.file_name = recording_data["file-name"]
         self.sono = recording_data["sono"]
         self.osci = recording_data["osci"]
         self.lic = recording_data["lic"]
         self.q = recording_data["q"]
-        self.length = recording_data["length"]
-        self.time = recording_data["time"]
+        self.length = length
+        self.timestamp = timestamp
         self.date = recording_data["date"]
-        self.uploaded = recording_data["uploaded"]
+        self.uploaded = uploaded
         self.also = recording_data["also"]
         self.rmk = recording_data["rmk"]
-        self.bird_seen = recording_data["bird_seen"]
-        self.animal_seen = recording_data["animal_seen"]
-        self.playback_used = recording_data["playback_used"]
-        self.temperature = recording_data["temperature"]
+        self.animal_seen = recording_data["animal-seen"]
+        self.playback_used = recording_data["playback-used"]
+        self.temperature = recording_data["temp"]
         self.regnr = recording_data["regnr"]
         self.auto = recording_data["auto"]
         self.dvc = recording_data["dvc"]
         self.mic = recording_data["mic"]
-        self.smp = recording_data["smp"]
+        self.smp = int(recording_data["smp"])
