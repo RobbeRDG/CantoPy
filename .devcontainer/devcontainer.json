@@ -12,7 +12,8 @@
 				"ms-toolsai.jupyter", // Jupyter
 				"visualstudioexptteam.vscodeintellicode", // Code completion
 				"ms-python.black-formatter", // Code formatter
-				"ms-python.pylint" // Linter
+				"ms-python.pylint", // Linter
+				"njpwerner.autodocstring" // Docstring generation
 			],
 		}
 	},
