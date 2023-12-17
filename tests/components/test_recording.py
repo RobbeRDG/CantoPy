@@ -1,6 +1,6 @@
 import json
 
-from src.cantopy.components.recording import Recording
+from cantopy import Recording
 
 
 def test_recording_init():

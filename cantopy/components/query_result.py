@@ -1,5 +1,5 @@
 from typing import List, Dict, Any
-from src.cantopy.components.recording import Recording
+from cantopy.components.recording import Recording
 
 
 class QueryResult:

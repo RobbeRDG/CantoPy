@@ -99,7 +99,11 @@ class Recording:
         # Extract the full timestamp from the given string representation
         recording_date = recording_data["date"]
         recording_time = recording_data["time"]
-        timestamp = Timestamp(f"{recording_date}T{recording_time}")
+        timestamp = (
+            Timestamp(f"{recording_date}T{recording_time}")
+            if recording_time != "?"  # If time is not set
+            else Timestamp(recording_date)
+        )
 
         # Extract the uploaded timestamp
         uploaded = Timestamp(recording_data["uploaded"])
@@ -114,8 +118,6 @@ class Recording:
         self.rec = recording_data["rec"]
         self.cnt = recording_data["cnt"]
         self.loc = recording_data["loc"]
-        self.lat = float(recording_data["lat"])
-        self.lng = float(recording_data["lng"])
         self.song_type = recording_data["type"]
         self.sex = recording_data["sex"]
         self.stage = recording_data["stage"]
@@ -141,3 +143,7 @@ class Recording:
         self.dvc = recording_data["dvc"]
         self.mic = recording_data["mic"]
         self.smp = int(recording_data["smp"])
+
+        # Set the optional recording attributes
+        self.lat = float(recording_data["lat"]) if recording_data["lat"] else None
+        self.lng = float(recording_data["lng"]) if recording_data["lng"] else None

@@ -1,6 +1,6 @@
 import json
 
-from src.cantopy.components.query_result import QueryResult
+from cantopy import QueryResult
 
 
 def test_queryresult_init():

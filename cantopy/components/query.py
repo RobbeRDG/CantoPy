@@ -206,6 +206,13 @@ class Query:
         self.month = month
         self.smp = smp
 
+    def format_init_parameter_str(self, parameter_str: str):
+        if parameter_str == "None":
+            return "None"
+
+        formatted_parameter_str = parameter_str
+        # Add
+
     def to_string(self) -> str:
         """Generate a string representation of the Query object for passing to the Xeno Canto API
 
@@ -217,36 +224,36 @@ class Query:
 
         attributes = [
             f"{self.name}",  # name does not have a tag in the API
-            f"grp={self.grp}",
-            f"gen={self.gen}",
-            f"ssp={self.ssp}",
-            f"rec={self.rec}",
-            f"cnt={self.cnt}",
-            f"loc={self.loc}",
-            f"rmk={self.rmk}",
-            f"seen={self.seen}",
-            f"playback={self.playback}",
-            f"lat={self.lat}",
-            f"lon={self.lon}",
-            f"box={self.box}",
-            f"also={self.also}",
-            f"type={self.song_type}",
-            f"othertype={self.othertype}",
-            f"sex={self.sex}",
-            f"stage={self.stage}",
-            f"method={self.method}",
-            f"nr={self.nr}",
-            f"license={self.file_license}",
-            f"q={self.q}",
-            f"length={self.length}",
-            f"area={self.area}",
-            f"since={self.since}",
-            f"year={self.year}",
-            f"month={self.month}",
-            f"smp={self.smp}",
+            f'grp:"{self.grp}"',
+            f'gen:"{self.gen}"',
+            f'ssp:"{self.ssp}"',
+            f'rec:"{self.rec}"',
+            f'cnt:"{self.cnt}"',
+            f'loc:"{self.loc}"',
+            f'rmk:"{self.rmk}"',
+            f'seen:"{self.seen}"',
+            f'playback:"{self.playback}"',
+            f'lat:"{self.lat}"',
+            f'lon:"{self.lon}"',
+            f'box:"{self.box}"',
+            f'also:"{self.also}"',
+            f'type:"{self.song_type}"',
+            f'othertype:"{self.othertype}"',
+            f'sex:"{self.sex}"',
+            f'stage:"{self.stage}"',
+            f'method:"{self.method}"',
+            f'nr:"{self.nr}"',
+            f'license:"{self.file_license}"',
+            f'q:"{self.q}"',
+            f'length:"{self.length}"',
+            f'area:"{self.area}"',
+            f'since:"{self.since}"',
+            f'year:"{self.year}"',
+            f'month:"{self.month}"',
+            f'smp:"{self.smp}"',
         ]
 
         # Remove the None values
         attributes = [attribute for attribute in attributes if "None" not in attribute]
 
-        return " ".join(filter(None, attributes))
+        return "+".join(filter(None, attributes))

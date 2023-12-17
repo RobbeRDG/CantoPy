@@ -1,16 +1,16 @@
+from typing import List
 import requests
 
-from components.query import Query
-from components.query_result import QueryResult
+from cantopy.components import Query, QueryResult
 
 
 class CantoPy:
-    """CantoPy, a Xeno Canto API wrapper"""
+    """CantoPy, the XenoCanto API wrapper"""
 
     def __init__(self) -> None:
         self.__base_url = "https://www.xeno-canto.org/api/2/recordings"
 
-    def query(self, query: Query, max_pages: int = 1) -> QueryResult:
+    def send_query(self, query: Query, max_pages: int = 1) -> List[QueryResult]:
         """Send a query to the Xeno Canto API
 
         Parameters
@@ -30,8 +30,10 @@ class CantoPy:
         query_str = query.to_string()
         QueryResult = self.__send_query_request(query_str)
 
+        return [QueryResult]
+
     def __send_query_request(self, query_str: str, page: int = 1) -> QueryResult:
-        json_response = requests.get(
+        query_response = requests.get(
             self.__base_url,
             params={
                 "query": query_str,
@@ -40,4 +42,4 @@ class CantoPy:
             timeout=5.0,
         ).json()
 
-        return QueryResult(json_response)
+        return QueryResult(query_response)

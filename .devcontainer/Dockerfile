@@ -29,6 +29,9 @@ RUN pip install --upgrade pip \
 # Set bash as the shell env
 ENV SHELL=/bin/bash
 
+# Update the pythonpath to always point to the base cantopy package
+ENV PYTHONPATH "${PYTHONPATH}:/workspaces/CantoPy/cantopy"
+
 # Set the default user
 USER $USERNAME
 
