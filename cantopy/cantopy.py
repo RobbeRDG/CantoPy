@@ -1,5 +1,6 @@
 from typing import List
 import requests
+import urllib.parse
 
 from cantopy.components import Query, QueryResult
 
@@ -33,12 +34,19 @@ class CantoPy:
         return [QueryResult]
 
     def __send_query_request(self, query_str: str, page: int = 1) -> QueryResult:
-        query_response = requests.get(
-            self.__base_url,
-            params={
+        # Encode the http payload
+        payload_str = urllib.parse.urlencode(
+            {
                 "query": query_str,
                 "page": page,
             },
+            safe=":+",
+        )
+
+        # Send request and open json return as dict
+        query_response = requests.get(
+            self.__base_url,
+            params=payload_str,
             timeout=5.0,
         ).json()
 
