@@ -206,13 +206,6 @@ class Query:
         self.month = month
         self.smp = smp
 
-    def format_init_parameter_str(self, parameter_str: str):
-        if parameter_str == "None":
-            return "None"
-
-        formatted_parameter_str = parameter_str
-        # Add
-
     def to_string(self) -> str:
         """Generate a string representation of the Query object for passing to the Xeno Canto API
 
