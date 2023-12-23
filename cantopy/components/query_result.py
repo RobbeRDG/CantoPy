@@ -1,3 +1,4 @@
+from typing import Dict
 from typing import List
 from components.result_page import ResultPage
 
@@ -13,12 +14,30 @@ class QueryResult:
     available_num_species : int
         The total available number of species found for this query,
         independent of the amount of recordings in this QueryResult.
-    page : int
-        The page number of the results page that is being displayed.
-    num_pages : int
+    available_num_pages : int
         The total number of pages available for this query.
-    recordings : List[Recording]
-        An array of recording objects containing detailed information about each recording.
+    result_pages: List[ResultPage]
+        List of all the returned pages for the query
+
     """
-    def __init__(self, result_pages: List[ResultPage]):
-        self.result
+
+    def __init__(self, query_metadata: Dict[str, int], result_pages: List[ResultPage]):
+        """Init a QueryResult container
+
+        Parameters
+        ----------
+        query_metadata : Dict[str, int]
+            Dictionary containing metadata information about the query results,
+            the dict keys are: "available_num_recordings", "available_num_species", "available_num_pages"
+        result_pages : List[ResultPage]
+            List of all the returned pages for the query
+
+        """
+
+        # Set the query metadata attributes
+        self.available_num_recordings = query_metadata["available_num_recordings"]
+        self.available_num_species = query_metadata["available_num_species"]
+        self.available_num_pages = query_metadata["available_num_pages"]
+
+        # Set the result pages
+        self.result_pages = result_pages
