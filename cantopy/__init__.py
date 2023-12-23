@@ -1,2 +1,2 @@
-from cantopy.components import QueryResult, Query, Recording
+from cantopy.components import ResultPage, Query, Recording
 from cantopy.cantopy import CantoPy

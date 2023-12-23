@@ -2,7 +2,7 @@ from cantopy import Query
 
 
 def test_to_string():
-    """Test for the initialisation of a QueryResult object from a dict returned by the XenoCanto API"""
+    """Test for the to_string method of the Query class"""
     query = Query(
         name="common blackbird",
         cnt="Netherlands",
