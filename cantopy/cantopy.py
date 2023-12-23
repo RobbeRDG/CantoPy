@@ -7,10 +7,19 @@ from components.result_page import ResultPage
 
 
 class CantoPy:
-    """CantoPy, the XenoCanto API wrapper"""
+    """CantoPy, the XenoCanto API wrapper
+    
+    Attributes
+    ----------
+    base_url : str
+        The base url pointing to the XenoCanto API endpoint.
+
+    """
 
     def __init__(self) -> None:
-        self.__base_url = "https://www.xeno-canto.org/api/2/recordings"
+        """Init the CantoPy instance
+        """
+        self.base_url = "https://www.xeno-canto.org/api/2/recordings"
 
     def send_query(self, query: Query, max_pages: int = 1) -> QueryResult:
         """Send a query to the Xeno Canto API.
@@ -71,7 +80,7 @@ class CantoPy:
 
         # Send request and open json return as dict
         query_response = requests.get(
-            self.__base_url,
+            self.base_url,
             params=payload_str,
             timeout=5.0,
         ).json()
