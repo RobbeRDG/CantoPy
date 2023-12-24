@@ -11,7 +11,6 @@ TEST_DATA_BASE_FOLDER_PATH = (
     "/workspaces/CantoPy/resources/test_resources/test_data_folders"
 )
 
-
 @pytest.fixture
 def empty_download_data_base_path() -> Generator[str, Any, Any]:
     """Logic for setting up and breaking down a new empty data folder.
