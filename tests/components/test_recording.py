@@ -1,15 +1,44 @@
-from typing import Dict
+from typing import Dict, List, Union
 
 import pytest
 
 from cantopy import Recording
 
+
 @pytest.fixture
-def example_recording(example_xenocanto_query_response: Dict[str, str | Dict[str, str]]) -> Recording:
+def example_recording(
+    example_xenocanto_query_response: Dict[str, str | List[Dict[str, str]]]
+) -> Recording:
+    """Build a Recording object based on the example XenoCanto API query response.
+
+    Parameters
+    ----------
+    example_xenocanto_query_response : Dict[str, str  |  Dict[str, str]]
+        The dictionary representation of example XenoCanto API query response.
+
+    Returns
+    -------
+    Recording
+        The created Recording object.
+    """
+
+    # Handle the string case, which should not be possible
+    if isinstance(example_xenocanto_query_response["recordings"], str):
+        raise ValueError(
+            "The returned recordings instance is a string, but should be a list of dictionaries"
+        )
+
     return Recording(example_xenocanto_query_response["recordings"][0])
 
+
 def test_recording_init(example_recording: Recording):
-    """Test for the initialisation of a Recording object from a dict returned by the XenoCanto API"""
+    """Test for the initialisation of a Recording object.
+
+    Parameters
+    ----------
+    example_recording : Recording
+        A Recording object based on the example XenoCanto API query response.
+    """
 
     # See if all recording fields are captured
     assert example_recording.id == 581412

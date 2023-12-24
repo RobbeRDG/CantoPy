@@ -87,7 +87,7 @@ class Recording:
 
         Parameters
         ----------
-        recording_data : dict
+        recording_data : Dict[str, str]
             The dict of the recording returned by the XenoCanto API
         """
         # Extract the recording length from the given string represntation
