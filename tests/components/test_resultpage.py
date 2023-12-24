@@ -1,29 +1,4 @@
-from typing import Dict
-
-import pytest
-
 from cantopy import ResultPage
-
-
-@pytest.fixture
-def example_result_page(
-    example_xenocanto_query_response: Dict[str, str | Dict[str, str]]
-) -> ResultPage:
-    """Build a ResultPage object from the example XenoCanto API query response.
-
-    Parameters
-    ----------
-    example_xenocanto_query_response : Dict[str, str  |  Dict[str, str]]
-        The dictionary representation of example XenoCanto API query response.
-
-    Returns
-    -------
-    ResultPage
-        The ResultPage object created from the example XenoCanto API query response.
-    """
-
-    return ResultPage(example_xenocanto_query_response)
-
 
 def test_resultpage_init(example_result_page: ResultPage):
     """Test for the initialisation of a ResultPage object.

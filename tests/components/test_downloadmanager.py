@@ -1,8 +1,7 @@
-from typing import Any, Generator, List
+from typing import Any, Generator
 
 import shutil
-from cantopy import DownloadManager, QueryResult, ResultPage
-import json
+from cantopy import DownloadManager, QueryResult
 import os
 from os.path import join
 import pytest
@@ -10,6 +9,7 @@ import pytest
 TEST_DATA_BASE_FOLDER_PATH = (
     "/workspaces/CantoPy/resources/test_resources/test_data_folders"
 )
+
 
 @pytest.fixture
 def empty_download_data_base_path() -> Generator[str, Any, Any]:
@@ -49,44 +49,14 @@ def empty_data_folder_download_manager(empty_download_data_base_path: str):
     return DownloadManager(empty_download_data_base_path)
 
 
-@pytest.fixture
-def single_page_query_result() -> QueryResult:
-    """Build an example single-result page QueryResult object for testing the DownloadManager.
-
-    Returns
-    -------
-    QueryResult
-        The test QueryResult instance.
-    """
-
-    # Open the example XenoCanto query response
-    with open(
-        "resources/test_resources/xenocanto_query_response.json", "r", encoding="utf-8"
-    ) as file:
-        query_response = json.load(file)
-
-    # Extract the metadata information of this query
-    query_metadata = {
-        "available_num_recordings": int(query_response["numRecordings"]),
-        "available_num_species": int(query_response["numSpecies"]),
-        "available_num_pages": int(query_response["numPages"]),
-    }
-
-    # Build the resultpage
-    result_page = ResultPage(query_response)
-
-    # Build a QueryResult
-    return QueryResult(query_metadata, [result_page])
-
-
 def test_downloadmanager_single_page_download(
     empty_download_data_base_path: str,
     empty_data_folder_download_manager: DownloadManager,
-    single_page_query_result: QueryResult,
+    example_single_page_queryresult: QueryResult,
 ):
     # Run the download functionality on a single page
     empty_data_folder_download_manager.download_queryresult_files(
-        single_page_query_result
+        example_single_page_queryresult
     )
 
     # After download, we should have a new folder containing three recordings and a
