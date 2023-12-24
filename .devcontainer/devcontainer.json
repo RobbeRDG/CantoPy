@@ -13,7 +13,9 @@
 				"visualstudioexptteam.vscodeintellicode", // Code completion
 				"ms-python.black-formatter", // Code formatter
 				"ms-python.pylint", // Linter
-				"njpwerner.autodocstring" // Docstring generation
+				"njpwerner.autodocstring", // Docstring generation
+				"aaron-bond.better-comments", // Comment highlighting
+				"gruntfuggly.todo-tree" // Todo's
 			],
 		}
 	},

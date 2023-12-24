@@ -14,16 +14,16 @@ class ResultPage:
 
     """
 
-    def __init__(self, single_page_query_response: Dict[str, Any]):
+    def __init__(self, single_page_query_response: Dict[str, str | Dict[str, str]]):
         """Create a ResultPage object from the XenoCanto json response
 
         Parameters
         ----------
-        single_page_query_response : dict
+        single_page_query_response : Dict[str, str]
             The response from the XenoCanto API.
         """
 
         self.page = int(single_page_query_response["page"])
         self.recordings: List[Recording] = []
-        for query_response_recording in single_page_query_response.get("recordings", []):
+        for query_response_recording in single_page_query_response["recordings"]:
             self.recordings.append(Recording(query_response_recording))

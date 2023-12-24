@@ -1,6 +1,6 @@
 class DownloadManager:
-    """A helper class for downloading the retrieved recordings from the XenoCanto APi.
-    """
+    """A helper class for downloading the retrieved recordings from the XenoCanto APi."""
+
     def __init__(self, data_base_path: str):
         """Init a DownloadManager instance
 
@@ -11,4 +11,5 @@ class DownloadManager:
         """
         self.data_base_path = data_base_path
 
-    
+    def download_queryresult_files(self):
+        pass

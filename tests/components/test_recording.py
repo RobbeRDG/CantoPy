@@ -1,61 +1,60 @@
-import json
+from typing import Dict
+
+import pytest
 
 from cantopy import Recording
 
+@pytest.fixture
+def example_recording(example_xenocanto_query_response: Dict[str, str | Dict[str, str]]) -> Recording:
+    return Recording(example_xenocanto_query_response["recordings"][0])
 
-def test_recording_init():
+def test_recording_init(example_recording: Recording):
     """Test for the initialisation of a Recording object from a dict returned by the XenoCanto API"""
-    # Open the example XenoCanto query response and extract the first recording only
-    with open(
-        "tests/test_resources/xenocanto_query_response.json", "r", encoding="utf-8"
-    ) as file:
-        query_response_recording = json.load(file)["recordings"][0]
-    recording = Recording(query_response_recording)
 
     # See if all recording fields are captured
-    assert recording.id == 581412
-    assert recording.gen == "Odontophorus"
-    assert recording.sp == "capueira"
-    assert recording.ssp == "plumbeicollis"
-    assert recording.group == "birds"
-    assert recording.en == "Spot-winged Wood Quail"
-    assert recording.rec == "Ciro Albano"
-    assert recording.cnt == "Brazil"
-    assert recording.loc == "RPPN Serra Bonita, Camacan-BA, Bahia"
-    assert recording.lat == -15.3915
-    assert recording.lng == -39.5643
-    assert recording.song_type == "duet, song"
-    assert recording.sex == "female, male"
-    assert recording.stage == "adult"
-    assert recording.method == "field recording"
-    assert recording.url == "//xeno-canto.org/581412"
-    assert recording.file == "https://xeno-canto.org/581412/download"
+    assert example_recording.id == 581412
+    assert example_recording.gen == "Odontophorus"
+    assert example_recording.sp == "capueira"
+    assert example_recording.ssp == "plumbeicollis"
+    assert example_recording.group == "birds"
+    assert example_recording.en == "Spot-winged Wood Quail"
+    assert example_recording.rec == "Ciro Albano"
+    assert example_recording.cnt == "Brazil"
+    assert example_recording.loc == "RPPN Serra Bonita, Camacan-BA, Bahia"
+    assert example_recording.lat == -15.3915
+    assert example_recording.lng == -39.5643
+    assert example_recording.song_type == "duet, song"
+    assert example_recording.sex == "female, male"
+    assert example_recording.stage == "adult"
+    assert example_recording.method == "field recording"
+    assert example_recording.url == "//xeno-canto.org/581412"
+    assert example_recording.file == "https://xeno-canto.org/581412/download"
     assert (
-        recording.file_name
+        example_recording.file_name
         == "XC581412-Odontophorus capueira _Serra Bonita_20200802-074609.mp3"
     )
-    assert recording.sono == {
+    assert example_recording.sono == {
         "small": "//xeno-canto.org/sounds/uploaded/MXVQPUKGWW/ffts/XC581412-small.png",
         "med": "//xeno-canto.org/sounds/uploaded/MXVQPUKGWW/ffts/XC581412-med.png",
         "large": "//xeno-canto.org/sounds/uploaded/MXVQPUKGWW/ffts/XC581412-large.png",
         "full": "//xeno-canto.org/sounds/uploaded/MXVQPUKGWW/ffts/XC581412-full.png",
     }
-    assert recording.osci == {
+    assert example_recording.osci == {
         "small": "//xeno-canto.org/sounds/uploaded/MXVQPUKGWW/wave/XC581412-small.png",
         "med": "//xeno-canto.org/sounds/uploaded/MXVQPUKGWW/wave/XC581412-med.png",
         "large": "//xeno-canto.org/sounds/uploaded/MXVQPUKGWW/wave/XC581412-large.png",
     }
-    assert recording.lic == "//creativecommons.org/licenses/by-nc-sa/4.0/"
-    assert recording.q == "A"
-    assert recording.length.seconds == 194
-    assert recording.timestamp.strftime("%Y-%m-%d %X") == "2020-08-02 08:00:00"
-    assert recording.uploaded.strftime("%Y-%m-%d") == "2020-08-09"
-    assert recording.also == ["Sclerurus scansor"]
-    assert recording.rmk == ""
-    assert recording.animal_seen == "yes"
-    assert recording.playback_used == "yes"
-    assert recording.regnr == ""
-    assert recording.auto == "no"
-    assert recording.dvc == ""
-    assert recording.mic == ""
-    assert recording.smp == 48000
+    assert example_recording.lic == "//creativecommons.org/licenses/by-nc-sa/4.0/"
+    assert example_recording.q == "A"
+    assert example_recording.length.seconds == 194
+    assert example_recording.timestamp.strftime("%Y-%m-%d %X") == "2020-08-02 08:00:00"
+    assert example_recording.uploaded.strftime("%Y-%m-%d") == "2020-08-09"
+    assert example_recording.also == ["Sclerurus scansor"]
+    assert example_recording.rmk == ""
+    assert example_recording.animal_seen == "yes"
+    assert example_recording.playback_used == "yes"
+    assert example_recording.regnr == ""
+    assert example_recording.auto == "no"
+    assert example_recording.dvc == ""
+    assert example_recording.mic == ""
+    assert example_recording.smp == 48000

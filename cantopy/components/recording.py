@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Dict
 
 from pandas import Timedelta, Timestamp
 
@@ -82,7 +82,7 @@ class Recording:
         Sample rate.
     """
 
-    def __init__(self, recording_data: Dict[str, Any]):
+    def __init__(self, recording_data: Dict[str, str]):
         """Create a Recording object with a given recording dict returned from the XenoCanto API
 
         Parameters
