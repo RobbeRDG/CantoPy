@@ -1,6 +1,8 @@
 from datetime import timedelta, datetime
 from typing import Dict
 
+from pandas import Timestamp
+
 
 class Recording:
     """
@@ -63,7 +65,7 @@ class Recording:
         Was playback used to lure the animal?
     temperature : str
         Temperature during recording (applicable to specific groups only).
-    
+
     automatic_recording : str
         Automatic (non-supervised) recording?
     recording_device : str
@@ -75,7 +77,7 @@ class Recording:
 
     Notes
     -----
-    Currently, the recording class does not capture the following information also returned by the 
+    Currently, the recording class does not capture the following information also returned by the
     XenoCanto API:
     - file-name : Original file name of the audio file.
     - sono : An object with the URLs to the four versions of sonograms.
@@ -102,9 +104,9 @@ class Recording:
         recording_date = recording_data["date"]
         recording_time = recording_data["time"]
         recording_timestamp = (
-            datetime.fromisoformat(f"{recording_date}T{recording_time}")
+            Timestamp(f"{recording_date}T{recording_time}")
             if recording_time != "?"  # If time is not set
-            else datetime.fromisoformat(recording_date)
+            else Timestamp(recording_date)
         )
 
         # Extract the uploaded timestamp
@@ -153,4 +155,3 @@ class Recording:
         self.latitude = float(recording_data["lat"]) if recording_data["lat"] else None
         self.longitude = float(recording_data["lng"]) if recording_data["lng"] else None
         self.temperature = recording_data["temp"]
-        

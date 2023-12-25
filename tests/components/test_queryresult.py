@@ -1,6 +1,7 @@
 from cantopy import ResultPage
 from components.query_result import QueryResult
 
+
 def test_query_result_single_page(
     example_single_page_queryresult: QueryResult, example_result_page: ResultPage
 ):

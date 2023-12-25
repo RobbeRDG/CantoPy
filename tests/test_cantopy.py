@@ -28,8 +28,8 @@ def test_query_singlepage(cantopy: CantoPy, query: Query):
 
     # See if the ResultPage object contain the requested information
     assert len(query_result.result_pages) == 1
-    assert query_result.result_pages[0].recordings[0].en == "Common Blackbird"
-    assert query_result.result_pages[0].recordings[0].q == "A"
+    assert query_result.result_pages[0].recordings[0].english_name == "Common Blackbird"
+    assert query_result.result_pages[0].recordings[0].quality_rating== "A"
 
 
 def test_query_multipage(cantopy: CantoPy, query: Query):
@@ -48,5 +48,5 @@ def test_query_multipage(cantopy: CantoPy, query: Query):
 
     # See if the ResultPage object contain the requested information
     assert len(query_result.result_pages) == 3
-    assert query_result.result_pages[0].recordings[0].en == "Common Blackbird"
-    assert query_result.result_pages[0].recordings[0].q == "A"
+    assert query_result.result_pages[0].recordings[0].english_name == "Common Blackbird"
+    assert query_result.result_pages[0].recordings[0].quality_rating == "A"
