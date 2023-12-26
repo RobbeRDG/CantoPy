@@ -144,8 +144,8 @@ def test_downloadmanager_download(
         containing the information that needs to be downloaded.
     """
     # Run the download functionality on a single page
-    empty_data_folder_download_manager.download_queryresult_recordings(
-        example_single_page_queryresult
+    empty_data_folder_download_manager._download_recordings(
+        example_single_page_queryresult.get_all_recordings()
     )
 
     # After download, we should have a new folder containing three recordings and a
@@ -211,13 +211,13 @@ def test_downloadmanager_downloaeded_recording_metadata_generation(
     # Lets simulate that after running the recording download logic, only recordings "581412"
     # and "427716" were downloaded, with the download of recording "581411" resulting in an error.
     # This would thus return a download_pass_or_fail_dict in the form
-    download_pass_or_fail_dict = {"581412": "pass", "581411": "fail", "427716": "pass"}
+    download_pass_or_fail = {"581412": "pass", "581411": "fail", "427716": "pass"}
 
     # Generate the metadata
     downloaded_recording_metadata = (
         fake_data_folder_download_manager._generate_downloaded_recording_metadata(
             example_single_page_queryresult.get_all_recordings(),
-            download_pass_or_fail_dict,
+            download_pass_or_fail,
         )
     )
 
@@ -244,4 +244,39 @@ def test_downloadmanager_downloaeded_recording_metadata_generation(
         == example_single_page_queryresult.result_pages[0]
         .recordings[2]
         .to_dataframe_row()
+    )
+
+
+def test_downloadmanager_generate_animal_folder_name(
+    fake_data_folder_download_manager: DownloadManager,
+):
+    """Test the generation of the animal folder name for the DownloadManager.
+
+    Parameters
+    ----------
+    fake_data_folder_download_manager : DownloadManager
+        DownloadManager instance set to a non-existant path, since we won't be downloading anything.
+    """
+    # Spaces should be replaced by "_"
+    assert (
+        fake_data_folder_download_manager._generate_animal_folder_name(
+            "test with just spaces"
+        )
+        == "test_with_just_spaces"
+    )
+
+    # Everything should be lower case
+    assert (
+        fake_data_folder_download_manager._generate_animal_folder_name(
+            "tEst CAPITAL Bird name"
+        )
+        == "test_capital_bird_name"
+    )
+
+    # Special chars
+    assert (
+        fake_data_folder_download_manager._generate_animal_folder_name(
+            "black-winged bird"
+        )
+        == "black-winged_bird"
     )
