@@ -1,6 +1,7 @@
 from datetime import timedelta, datetime
 from typing import Dict
 
+import pandas as pd
 from pandas import Timestamp
 
 
@@ -155,3 +156,49 @@ class Recording:
         self.latitude = float(recording_data["lat"]) if recording_data["lat"] else None
         self.longitude = float(recording_data["lng"]) if recording_data["lng"] else None
         self.temperature = recording_data["temp"]
+
+    def to_dataframe_row(self) -> pd.DataFrame:
+        """Convert the Recording object to a pandas DataFrame row.
+
+        Returns
+        -------
+        pd.DataFrame
+            A pandas DataFrame row containing the recording information.
+        """
+
+        data = {
+            "recording_id": [self.recording_id],
+            "generic_name": [self.generic_name],
+            "specific_name": [self.specific_name],
+            "subspecies_name": [self.subspecies_name],
+            "species_group": [self.species_group],
+            "english_name": [self.english_name],
+            "sound_type": [self.sound_type],
+            "sex": [self.sex],
+            "life_stage": [self.life_stage],
+            "background_species": [self.background_species],
+            "animal_seen": [self.animal_seen],
+            "recordist_name": [self.recordist_name],
+            "recording_method": [self.recording_method],
+            "license_url": [self.license_url],
+            "quality_rating": [self.quality_rating],
+            "recording_length": [self.recording_length],
+            "recording_timestamp": [self.recording_timestamp],
+            "date": [self.date],
+            "upload_timestamp": [self.upload_timestamp],
+            "recording_url": [self.recording_url],
+            "audio_file_url": [self.audio_file_url],
+            "recordist_remarks": [self.recordist_remarks],
+            "playback_used": [self.playback_used],
+            "automatic_recording": [self.automatic_recording],
+            "recording_device": [self.recording_device],
+            "microphone_used": [self.microphone_used],
+            "sample_rate": [self.sample_rate],
+            "country": [self.country],
+            "locality_name": [self.locality_name],
+            "latitude": [self.latitude],
+            "longitude": [self.longitude],
+            "temperature": [self.temperature],
+        }
+
+        return pd.DataFrame(data)

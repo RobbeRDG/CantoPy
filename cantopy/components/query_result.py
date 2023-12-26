@@ -1,6 +1,6 @@
 from typing import Dict
 from typing import List
-from components.result_page import ResultPage
+from components.result_page import ResultPage, Recording
 
 
 class QueryResult:
@@ -22,15 +22,15 @@ class QueryResult:
     """
 
     def __init__(self, query_metadata: Dict[str, int], result_pages: List[ResultPage]):
-        """Init a QueryResult container
+        """Init a QueryResult container.
 
         Parameters
         ----------
         query_metadata : Dict[str, int]
             Dictionary containing metadata information about the query results,
-            the dict keys are: "available_num_recordings", "available_num_species", "available_num_pages"
+            the dict keys are: "available_num_recordings", "available_num_species", "available_num_pages".
         result_pages : List[ResultPage]
-            List of all the returned pages for the query
+            List of all the returned pages for the query.
 
         """
 
@@ -41,3 +41,24 @@ class QueryResult:
 
         # Set the result pages
         self.result_pages = result_pages
+
+    def get_all_recordings(self) -> List[Recording]:
+        """Return all the recordings contained in this QueryResult, across all ResultPages.
+
+        Returns
+        -------
+        List[Recording]
+            List of all the recordings contained in this QueryResult.
+
+        """
+
+        # Initialize the list of recordings
+        all_recordings: List[Recording] = []
+
+        # Loop over all the result pages
+        for result_page in self.result_pages:
+            # Add all the recordings to the list
+            all_recordings.extend(result_page.recordings)
+
+        # Return the list of recordings
+        return all_recordings

@@ -15,4 +15,4 @@ def test_resultpage_init(example_result_page: ResultPage):
     # Just check if recording is also set,
     # but more detailed recording evaluation is in the Recording test section
     assert len(example_result_page.recordings) == 3
-    assert example_result_page.recordings[0].id == 581412
+    assert example_result_page.recordings[0].recording_id == 581412
