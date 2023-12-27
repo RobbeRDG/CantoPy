@@ -8,13 +8,14 @@ from components.query_result import QueryResult
     "example_queryresult_fixture_name, expected_num_pages",
     [
         ("example_single_page_queryresult", 1),
-        ("example_three_page_queryresult", 3),
+        ("example_two_page_queryresult", 2),
     ],
 )
 def test_query_result_initialization(
     example_queryresult_fixture_name: str,
     expected_num_pages: int,
-    example_result_page: ResultPage,
+    example_result_page_page_1: ResultPage,
+    example_result_page_page_2: ResultPage,
     request: pytest.FixtureRequest,
 ):
     """Test the initialization of a QueryResult object.
@@ -25,8 +26,10 @@ def test_query_result_initialization(
         Fixture name of the example QueryResult object based on the example XenoCanto API response.
     expected_num_pages : int
         Expected number of ResultPage instances in the QueryResult object.
-    example_result_page : ResultPage
-        Example ResultPage object based on the example XenoCanto API response.
+    example_result_page_page_1 : ResultPage
+        Example ResultPage object based on the example page 2 XenoCanto API response.
+    example_result_page_page_2 : ResultPage
+        Example ResultPage object based on the example page 2 XenoCanto API response.
     request : pytest.FixtureRequest
         Request fixture to get the example QueryResult object.
     """
@@ -41,19 +44,24 @@ def test_query_result_initialization(
 
     # Check stored result pages
     assert len(example_queryresult.result_pages) == expected_num_pages
-    assert example_queryresult.result_pages[0] == example_result_page
+    if example_queryresult_fixture_name == "example_single_page_queryresult":
+        assert example_queryresult.result_pages[0] == example_result_page_page_1
+    elif example_queryresult_fixture_name == "example_two_page_queryresult":
+        assert example_queryresult.result_pages[0] == example_result_page_page_1
+        assert example_queryresult.result_pages[1] == example_result_page_page_2
 
 
 @pytest.mark.parametrize(
     "example_queryresult_fixture_name",
     [
         ("example_single_page_queryresult"),
-        ("example_three_page_queryresult"),
+        ("example_two_page_queryresult"),
     ],
 )
 def test_query_result_get_all_recordings(
     example_queryresult_fixture_name: str,
-    example_result_page: ResultPage,
+    example_result_page_page_1: ResultPage,
+    example_result_page_page_2: ResultPage,
     request: pytest.FixtureRequest,
 ):
     """Test the QueryResult's functionality to return all the contained recordings across ResultPages.
@@ -62,8 +70,10 @@ def test_query_result_get_all_recordings(
     ----------
     example_queryresult_fixture_name : str
         Fixture name of the example QueryResult object based on the example XenoCanto API response.
-    example_result_page : ResultPage
-        Example ResultPage object based on the example XenoCanto API response.
+    example_result_page_page_1 : ResultPage
+        Example ResultPage object based on the example page 1 XenoCanto API response.
+    example_result_page_page_2 : ResultPage
+        Example ResultPage object based on the example page 2 XenoCanto API response.
     request : pytest.FixtureRequest
         Request fixture to get the example QueryResult object.
     """
@@ -75,20 +85,25 @@ def test_query_result_get_all_recordings(
     # Get all the recordings contained in the example_queryresult
     recordings_list = example_queryresult.get_all_recordings()
 
-    # In the provided query result instance, a single example result page instance gets repeated
-    # for the amount of needed result pages.
-    # This thus means that the correct total number of recordings that should be returned
-    # is equal to the amount of result pages times the amount of recordings in the ResultPage instance.
-    num_recordings = len(example_queryresult.result_pages) * len(
-        example_result_page.recordings
-    )
+    # The correct total number of recordings that should be returned is equal to the sum of the
+    # amount of recordings in each result page instance.
+    num_recordings = 0
+    if example_queryresult_fixture_name == "example_single_page_queryresult":
+        num_recordings += len(example_result_page_page_1.recordings)
+    elif example_queryresult_fixture_name == "example_two_page_queryresult":
+        num_recordings += len(example_result_page_page_1.recordings)
+        num_recordings += len(example_result_page_page_2.recordings)
     assert len(recordings_list) == num_recordings
 
-    # The specific recordings should thus also be a repeating sequence of the recordings
-    # in the example result page instance.
-    for i in range(0, len(example_queryresult.result_pages)):
-        for j in range(0, len(example_result_page.recordings)):
-            assert (
-                recordings_list[i * len(example_result_page.recordings) + j]
-                == example_result_page.recordings[j]
-            )
+    # The specific recordings should also be in the correct order
+    if example_queryresult_fixture_name == "example_single_page_queryresult":
+        assert recordings_list == example_result_page_page_1.recordings
+    elif example_queryresult_fixture_name == "example_two_page_queryresult":
+        assert (
+            recordings_list[: len(example_result_page_page_1.recordings)]
+            == example_result_page_page_1.recordings
+        )
+        assert (
+            recordings_list[len(example_result_page_page_1.recordings) :]
+            == example_result_page_page_2.recordings
+        )

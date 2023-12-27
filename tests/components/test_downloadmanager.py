@@ -1,10 +1,11 @@
-from typing import Any, Generator
+from typing import Any, Generator, List
 
 import shutil
 from cantopy import DownloadManager, QueryResult
 import os
 from os.path import join
 import pytest
+import pandas as pd
 
 TEST_DATA_BASE_FOLDER_PATH = (
     "/workspaces/CantoPy/resources/test_resources/test_data_folders"
@@ -73,7 +74,6 @@ def partially_filled_download_data_base_path() -> Generator[str, Any, Any]:
 
     # After exectution cleanup
     shutil.rmtree(partially_filled_data_base_path)
-
 
 @pytest.fixture
 def empty_data_folder_download_manager(empty_download_data_base_path: str):
@@ -166,6 +166,8 @@ def test_downloadmanager_download(
     assert "427716.mp3" in os.listdir(bird_folder)
     assert "spot-winged_wood_quail_recording_metadata.csv" in os.listdir(bird_folder)
 
+    # TODO: wirte test for failed download
+
 
 def test_downloadmanager_detect_already_donwloaded_recordings(
     partially_filled_data_folder_download_manager: DownloadManager,
@@ -191,7 +193,7 @@ def test_downloadmanager_detect_already_donwloaded_recordings(
     assert detected_already_downloaded_recordings["427716"] == "new"
 
 
-def test_downloadmanager_downloaeded_recording_metadata_generation(
+def test_downloadmanager_generate_downloaeded_recording_metadata(
     fake_data_folder_download_manager: DownloadManager,
     example_single_page_queryresult: QueryResult,
 ):
@@ -247,10 +249,52 @@ def test_downloadmanager_downloaeded_recording_metadata_generation(
     )
 
 
+def test_downloadmanager_update_animal_recording_metadata_files(
+    partially_filled_data_folder_download_manager: DownloadManager,
+    example_single_page_queryresult: QueryResult,
+):
+    # Get all recordins from the query result
+    query_result = 
+    downloaded_recordings = query_result.get_all_recordings()
+    
+    # Set the download pass or fail dict to all pass
+    download_pass_or_fail = {}
+    for downloaded_recording in downloaded_recordings:
+        download_pass_or_fail[str(downloaded_recording.recording_id)] = "pass"
+
+    # Generate the metadata for all recordins in the query result
+    downloaded_recording_metadata = (
+        fake_data_folder_download_manager._generate_downloaded_recording_metadata(
+            downloaded_recordings,
+            download_pass_or_fail,
+        )
+    )
+    
+    # Find the animal recording metadata files that should have been updated,
+    # based on the animal name in the recording metadata
+    downloaded_animal_english_names: List[str] = (
+        downloaded_recording_metadata["english_name"].unique().tolist() # type: ignore
+    )
+    folder_names_of_donwloaded_animals = [
+        partially_filled_data_folder_download_manager._generate_animal_folder_name(
+            animal_english_name
+        )
+        for animal_english_name in downloaded_animal_english_names
+    ]
+    recording_metadata_files_that_should_be_updated = [
+        join(
+            partially_filled_data_folder_download_manager.data_base_path,
+            animal_folder_name,
+            f"{animal_folder_name}_recording_metadata.csv",
+        )
+        for animal_folder_name in folder_names_of_donwloaded_animals
+    ]
+
+
 def test_downloadmanager_generate_animal_folder_name(
     fake_data_folder_download_manager: DownloadManager,
 ):
-    """Test the generation of the animal folder name for the DownloadManager.
+    """Test the generation functionality of the animal folder name in the DownloadManager.
 
     Parameters
     ----------

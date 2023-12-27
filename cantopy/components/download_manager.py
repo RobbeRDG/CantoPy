@@ -42,6 +42,16 @@ class DownloadManager:
         )
         download_pass_or_fail = self._download_recordings(not_already_downloaded_recordings)
 
+        # Generate the metadata dataframe for the downloaded recordings
+        downloaded_recording_metadata = (
+            self._generate_downloaded_recording_metadata(
+                not_already_downloaded_recordings,
+                download_pass_or_fail,
+            )
+        ) 
+
+        
+
     def _detect_already_downloaded_recordings(
         self, recordings: List[Recording]
     ) -> Dict[str, str]:
