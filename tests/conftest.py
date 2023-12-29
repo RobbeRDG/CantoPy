@@ -1,8 +1,12 @@
-from typing import Dict, List
+from typing import Any, Dict, Generator, List
 import pytest
 import json
+import os
+from os.path import join
+import pandas as pd
+import shutil
 
-from cantopy import ResultPage, QueryResult, Recording
+from cantopy import ResultPage, QueryResult, Recording, DownloadManager
 
 ######################################################################
 #### XENOCANTO RETURN COMPONENT FIXTURES
@@ -222,3 +226,354 @@ def example_two_page_queryresult(
     result_pages.append(example_result_page_page_2)
 
     return QueryResult(example_query_metadata_page_1, result_pages)
+
+
+######################################################################
+#### DOWNLOADMANAGER FIXTURES
+######################################################################
+
+TEST_DATA_BASE_FOLDER_PATH = (
+    "/workspaces/CantoPy/resources/test_resources/test_data_folders"
+)
+
+
+@pytest.fixture
+def empty_download_data_base_path() -> Generator[str, Any, Any]:
+    """Logic for setting up and breaking down a new empty data folder.
+
+    Yields
+    ------
+    Generator[str, Any, Any]
+        Return the string path to the newly created empty data folder.
+    """
+    # Pre-execution configuration
+    empty_download_data_base_path = join(
+        TEST_DATA_BASE_FOLDER_PATH, "empty_test_data_folder"
+    )
+    os.mkdir(empty_download_data_base_path)
+
+    yield empty_download_data_base_path
+
+    # After exectution cleanup
+    shutil.rmtree(empty_download_data_base_path)
+
+
+@pytest.fixture
+def partially_filled_download_data_base_path(
+    spot_winged_wood_quail_partial_test_recording_metadata: pd.DataFrame,
+    little_nightjar_partial_test_recording_metadata: pd.DataFrame,
+) -> Generator[str, Any, Any]:
+    """Logic for setting up and breaking down a new partially-filled data folder.
+
+    Upon creation, this folder will already contain part of the recordings returned by
+    the example pages 1 and 2 XenoCanto API response. This new folder has the following structure:
+    |- folder_root
+    |---- spot-winged_wood_quail
+    |------- 581411.mp3
+    |------- spot-winged_wood_quail_recording_metadata.csv
+    |---- little_nightjar
+    |------- 196385.mp3
+    |------- 220365.mp3
+    |------- little_nightjar_recording_metadata.csv
+
+    Parameters
+    ----------
+    spot_winged_wood_quail_partial_test_recording_metadata : pd.DataFrame
+        The test recording metadata for the spot-winged wood quail recordings that are already
+        present.
+    little_nightjar_partial_test_recording_metadata : pd.DataFrame
+        The test recording metadata for the little nightjar recordings that are already
+        present.
+
+    Yields
+    ------
+    Generator[str, Any, Any]
+        Return the string path to the newly created partially-filled data folder.
+    """
+    # Pre-execution configuration
+    partially_filled_data_base_path = join(
+        TEST_DATA_BASE_FOLDER_PATH, "partially_filled_test_data_folder"
+    )
+    os.mkdir(partially_filled_data_base_path)
+
+    # Partially fill the newly created folder
+    os.mkdir(join(partially_filled_data_base_path, "spot_winged_wood_quail"))
+    open(
+        join(partially_filled_data_base_path, "spot_winged_wood_quail", "581411.mp3"),
+        "x",
+    )
+    spot_winged_wood_quail_partial_test_recording_metadata.to_csv(
+        join(
+            partially_filled_data_base_path,
+            "spot_winged_wood_quail",
+            "spot_winged_wood_quail_recording_metadata.csv",
+        ),
+        index=False,
+    )
+    os.mkdir(join(partially_filled_data_base_path, "little_nightjar"))
+    open(join(partially_filled_data_base_path, "little_nightjar", "196385.mp3"), "x")
+    open(join(partially_filled_data_base_path, "little_nightjar", "220365.mp3"), "x")
+    little_nightjar_partial_test_recording_metadata.to_csv(
+        join(
+            partially_filled_data_base_path,
+            "little_nightjar",
+            "little_nightjar_recording_metadata.csv",
+        ),
+        index=False,
+    )
+
+    yield partially_filled_data_base_path
+
+    # After exectution cleanup
+    shutil.rmtree(partially_filled_data_base_path)
+
+
+@pytest.fixture
+def empty_data_folder_download_manager(empty_download_data_base_path: str):
+    """Build a DownloadManager instance with its download folder set to a new empty folder.
+
+    Parameters
+    ----------
+    empty_download_data_base_path : str
+        The path to a newly created empty download folder.
+
+    Returns
+    -------
+    DownloadManager
+        The created DownloadManager instance.
+    """
+    return DownloadManager(empty_download_data_base_path)
+
+
+@pytest.fixture
+def partially_filled_data_folder_download_manager(
+    partially_filled_download_data_base_path: str,
+):
+    """Build a DownloadManager instance with its download folder set a partially-filled data folder.
+
+    Parameters
+    ----------
+    partially_filled_download_data_base_path : str
+        The path to a newly created but partially-filled data folder.
+
+    Returns
+    -------
+    DownloadManager
+        The created DownloadManager instance.
+    """
+    return DownloadManager(partially_filled_download_data_base_path)
+
+
+@pytest.fixture
+def fake_data_folder_download_manager():
+    """Build a DownloadManager instance with its download folder set to a fake/non-existant
+    download folder. This DownloadManager instance can be used when we don't need to
+    test any file storage functionality of this class.
+
+    Returns
+    -------
+    DownloadManager
+        The created DownloadManager instance.
+    """
+    return DownloadManager("fake/path")
+
+
+@pytest.fixture
+def little_nightjar_full_test_recording_metadata() -> pd.DataFrame:
+    """Load the full test recording metadata for the little nightjar.
+
+    Returns
+    -------
+    pd.DataFrame
+        The loaded test recording metadata for the little nightjar.
+    """
+    return (
+        pd.read_csv(  # type: ignore
+            "resources/test_resources/little_nightjar_full_test_recording_metadata.csv"
+        )
+        .sort_values(by=["recording_id"])
+        .reset_index(drop=True)
+    )
+
+
+@pytest.fixture
+def spot_winged_wood_quail_full_test_recording_metadata() -> pd.DataFrame:
+    """Load the full test recording metadata for the spot-winged wood quail.
+
+    Returns
+    -------
+    pd.DataFrame
+        The loaded test recording metadata for the spot-winged wood quail.
+    """
+    return (
+        pd.read_csv(  # type: ignore
+            "resources/test_resources/spot_winged_wood_quail_full_test_recording_metadata.csv"
+        )
+        .sort_values(by=["recording_id"])
+        .reset_index(drop=True)
+    )
+
+
+@pytest.fixture
+def combined_full_test_recording_metadata(
+    little_nightjar_full_test_recording_metadata: pd.DataFrame,
+    spot_winged_wood_quail_full_test_recording_metadata: pd.DataFrame,
+) -> pd.DataFrame:
+    """Load the full test recording metadata for the little nightjar and the spot-winged wood quail.
+
+    Parameters
+    ----------
+    little_nightjar_full_test_recording_metadata : pd.DataFrame
+        The loaded full test recording metadata for the little nightjar.
+    spot_winged_wood_quail_full_test_recording_metadata : pd.DataFrame
+        The loaded full test recording metadata for the spot-winged wood quail.
+
+    Returns
+    -------
+    pd.DataFrame
+        The loaded test recording metadata for the little nightjar and the spot-winged wood quail.
+    """
+    return (
+        pd.concat(  # type: ignore
+            [
+                little_nightjar_full_test_recording_metadata,
+                spot_winged_wood_quail_full_test_recording_metadata,
+            ]
+        )
+        .sort_values(by=["recording_id"])
+        .reset_index(drop=True)
+    )
+
+
+@pytest.fixture
+def little_nightjar_partial_test_recording_metadata() -> pd.DataFrame:
+    """Load the partial test recording metadata for the little nightjar.
+
+    Returns
+    -------
+    pd.DataFrame
+        The loaded test recording metadata for the little nightjar.
+    """
+    return (
+        pd.read_csv(  # type: ignore
+            "resources/test_resources/little_nightjar_partial_test_recording_metadata.csv"
+        )
+        .sort_values(by=["recording_id"])
+        .reset_index(drop=True)
+    )
+
+
+@pytest.fixture
+def spot_winged_wood_quail_partial_test_recording_metadata() -> pd.DataFrame:
+    """Load the partial test recording metadata for the spot-winged wood quail.
+
+    Returns
+    -------
+    pd.DataFrame
+        The loaded test recording metadata for the spot-winged wood quail.
+    """
+    return (
+        pd.read_csv(  # type: ignore
+            "resources/test_resources/spot_winged_wood_quail_partial_test_recording_metadata.csv"
+        )
+        .sort_values(by=["recording_id"])
+        .reset_index(drop=True)
+    )
+
+
+@pytest.fixture
+def combined_partial_test_recording_metadata(
+    little_nightjar_partial_test_recording_metadata: pd.DataFrame,
+    spot_winged_wood_quail_partial_test_recording_metadata: pd.DataFrame,
+) -> pd.DataFrame:
+    """Load the partial test recording metadata for the little nightjar and the spot-winged wood quail.
+
+    Parameters
+    ----------
+    little_nightjar_partial_test_recording_metadata : pd.DataFrame
+        The loaded partial test recording metadata for the little nightjar.
+    spot_winged_wood_quail_partial_test_recording_metadata : pd.DataFrame
+        The loaded partial test recording metadata for the spot-winged wood quail.
+
+    Returns
+    -------
+    pd.DataFrame
+        The loaded test recording metadata for the little nightjar and the spot-winged wood quail.
+    """
+    return (
+        pd.concat(  # type: ignore
+            [
+                little_nightjar_partial_test_recording_metadata,
+                spot_winged_wood_quail_partial_test_recording_metadata,
+            ]
+        )
+        .sort_values(by=["recording_id"])
+        .reset_index(drop=True)
+    )
+
+
+@pytest.fixture
+def little_nightjar_to_add_test_recording_metadata() -> pd.DataFrame:
+    """Load the test recording metadata for the little nightjar that we want to add.
+
+    Returns
+    -------
+    pd.DataFrame
+        The loaded test recording metadata for the little nightjar.
+    """
+    return (
+        pd.read_csv(  # type: ignore
+            "resources/test_resources/little_nightjar_to_add_test_recording_metadata.csv"
+        )
+        .sort_values(by=["recording_id"])
+        .reset_index(drop=True)
+    )
+
+
+@pytest.fixture
+def spot_winged_wood_quail_to_add_test_recording_metadata() -> pd.DataFrame:
+    """Load the test recording metadata for the spot-winged wood quail that we want to add.
+
+    Returns
+    -------
+    pd.DataFrame
+        The loaded test recording metadata for the spot-winged wood quail.
+    """
+    return (
+        pd.read_csv(  # type: ignore
+            "resources/test_resources/spot_winged_wood_quail_to_add_test_recording_metadata.csv"
+        )
+        .sort_values(by=["recording_id"])
+        .reset_index(drop=True)
+    )
+
+
+@pytest.fixture
+def combined_to_add_test_recording_metadata(
+    little_nightjar_to_add_test_recording_metadata: pd.DataFrame,
+    spot_winged_wood_quail_to_add_test_recording_metadata: pd.DataFrame,
+) -> pd.DataFrame:
+    """Load the test recording metadata for the little nightjar and the spot-winged wood quail that we want to add.
+
+    Parameters
+    ----------
+    little_nightjar_to_add_test_recording_metadata : pd.DataFrame
+        The loaded test recording metadata for the little nightjar we want to add.
+    spot_winged_wood_quail_to_add_test_recording_metadata : pd.DataFrame
+        The loaded test recording metadata for the spot-winged wood quail we want to add.
+
+    Returns
+    -------
+    pd.DataFrame
+        The loaded test recording metadata for the little nightjar and the spot-winged wood quail.
+    """
+    return (
+        pd.concat(  # type: ignore
+            [
+                little_nightjar_to_add_test_recording_metadata,
+                spot_winged_wood_quail_to_add_test_recording_metadata,
+            ]
+        )
+        .sort_values(by=["recording_id"])
+        .reset_index(drop=True)
+    )
