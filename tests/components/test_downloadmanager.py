@@ -1,55 +1,137 @@
-from typing import Any, Generator, List
-
-import shutil
-from cantopy import DownloadManager, QueryResult
+from cantopy import DownloadManager, QueryResult, Recording
 import os
 from os.path import join
 import pytest
 import pandas as pd
 
 
-def test_downloadmanager_download(
-    empty_download_data_base_path: str,
+@pytest.mark.parametrize(
+    "example_queryresult_fixture_name, add_fake_recording",
+    [
+        ("example_single_page_queryresult", False),
+        ("example_two_page_queryresult", False),
+        ("example_single_page_queryresult", True),
+        ("example_two_page_queryresult", True),
+    ],
+)
+def test_downloadmanager_download_recordings(
     empty_data_folder_download_manager: DownloadManager,
-    example_single_page_queryresult: QueryResult,
+    example_queryresult_fixture_name: str,
+    add_fake_recording: bool,
+    example_fake_xenocanto_recording: Recording,
+    request: pytest.FixtureRequest,
 ):
     """Test the DownloadManager functionality for donwloading QueryResult
     in an empty folder.
 
     Parameters
     ----------
-    empty_download_data_base_path : str
-        Empty forlder for storing the test downloaded data.
     empty_data_folder_download_manager : DownloadManager
-        DownloadManager configured with the "empty_download_data_base_path" as download path.
-    example_single_page_queryresult : QueryResult
-        Single-page QueryResult object based on the example XenoCanto API query response
-        containing the information that needs to be downloaded.
+        DownloadManager instance set to an empty data folder.
+    example_queryresult_fixture_name : str
+        Fixture name of the example QueryResult object based on the example XenoCanto API responses.
+    add_fake_recording : bool
+        Whether to add a fake recording to the recordings to download in order to test fail
+        scenarios.
+    example_fake_xenocanto_recording : Recording
+        Example fake recording to add to the recordings to download in order to test fail
+    request : pytest.FixtureRequest
+        Request fixture to get the example QueryResult object.
     """
-    # Run the download functionality on a single page
-    empty_data_folder_download_manager._download_recordings(
-        example_single_page_queryresult.get_all_recordings()
+    example_queryresult: QueryResult = request.getfixturevalue(
+        example_queryresult_fixture_name
     )
 
-    # After download, we should have a new folder containing three recordings and a
-    # recording metadata file in the format:
-    # |- spot-winged_wood_quail
-    # |---- 581412.mp3
-    # |---- 581411.mp3
-    # |---- 427716.mp3
-    # |---- spot-winged_wood_quail_recording_metadata.csv
+    recordings_to_download = example_queryresult.get_all_recordings()
 
-    assert len(os.listdir(empty_download_data_base_path)) == 1
-    assert os.listdir(empty_download_data_base_path)[0] == "spot-winged_wood_quail"
+    # Add fake recordings to the beginning and end of the recordings to download
+    if add_fake_recording:
+        recordings_to_download.insert(0, example_fake_xenocanto_recording)
 
-    bird_folder = join(empty_download_data_base_path, "spot-winged_wood_quail")
-    assert len(os.listdir(bird_folder)) == 3
-    assert "581412.mp3" in os.listdir(bird_folder)
-    assert "581411.mp3" in os.listdir(bird_folder)
-    assert "427716.mp3" in os.listdir(bird_folder)
-    assert "spot_winged_wood_quail_recording_metadata.csv" in os.listdir(bird_folder)
+    # Run the download functionality on a single page
+    download_pass_or_fail = empty_data_folder_download_manager._download_all_recordings(
+        recordings_to_download
+    )
 
-    # TODO: wirte test for failed download
+    # Check if the download pass or fail dict has been generated correctly
+    if example_queryresult_fixture_name == "example_single_page_queryresult":
+        if add_fake_recording:
+            assert len(download_pass_or_fail) == 4
+            assert download_pass_or_fail["0"] == "fail"
+        elif not add_fake_recording:
+            assert len(download_pass_or_fail) == 3
+
+        assert download_pass_or_fail["581412"] == "pass"
+        assert download_pass_or_fail["581411"] == "pass"
+        assert download_pass_or_fail["427716"] == "pass"
+    elif example_queryresult_fixture_name == "example_two_page_queryresult":
+        if add_fake_recording:
+            assert len(download_pass_or_fail) == 7
+            assert download_pass_or_fail["0"] == "fail"
+        elif not add_fake_recording:
+            assert len(download_pass_or_fail) == 6
+
+        assert download_pass_or_fail["581412"] == "pass"
+        assert download_pass_or_fail["581411"] == "pass"
+        assert download_pass_or_fail["427716"] == "pass"
+        assert download_pass_or_fail["220366"] == "pass"
+        assert download_pass_or_fail["220365"] == "pass"
+        assert download_pass_or_fail["196385"] == "pass"
+
+    # Check if the files have been downloaded correctly
+    if example_queryresult_fixture_name == "example_single_page_queryresult":
+        # After download, we should have a new folder containing recordings in the format:
+        # |- spot-winged_wood_quail
+        # |---- 581412.mp3
+        # |---- 581411.mp3
+        # |---- 427716.mp3
+
+        assert len(os.listdir(empty_data_folder_download_manager.data_base_path)) == 1
+        assert os.listdir(empty_data_folder_download_manager.data_base_path)[0] == (
+            "spot_winged_wood_quail"
+        )
+
+        bird_folder = join(
+            empty_data_folder_download_manager.data_base_path, "spot_winged_wood_quail"
+        )
+        assert len(os.listdir(bird_folder)) == 3
+        assert "581412.mp3" in os.listdir(bird_folder)
+        assert "581411.mp3" in os.listdir(bird_folder)
+        assert "427716.mp3" in os.listdir(bird_folder)
+    if example_queryresult_fixture_name == "example_two_page_queryresult":
+        # After download, we should have a new folder containing recordings in the format:
+        # |- spot-winged_wood_quail
+        # |---- 581412.mp3
+        # |---- 581411.mp3
+        # |---- 427716.mp3
+        # |- little_nightjar
+        # |---- 196385.mp3
+        # |-----220365.mp3
+        # |-----220366.mp3
+
+        assert len(os.listdir(empty_data_folder_download_manager.data_base_path)) == 2
+        assert "spot_winged_wood_quail" in os.listdir(
+            empty_data_folder_download_manager.data_base_path
+        )
+        assert "little_nightjar" in os.listdir(
+            empty_data_folder_download_manager.data_base_path
+        )
+
+        bird_folder = join(
+            empty_data_folder_download_manager.data_base_path, "spot_winged_wood_quail"
+        )
+        assert len(os.listdir(bird_folder)) == 3
+        assert "581412.mp3" in os.listdir(bird_folder)
+        assert "581411.mp3" in os.listdir(bird_folder)
+        assert "427716.mp3" in os.listdir(bird_folder)
+
+        bird_folder = join(
+            empty_data_folder_download_manager.data_base_path, "little_nightjar"
+        )
+        assert len(os.listdir(bird_folder)) == 3
+        assert "220366.mp3" in os.listdir(bird_folder)
+        assert "220365.mp3" in os.listdir(bird_folder)
+        assert "196385.mp3" in os.listdir(bird_folder)
 
 
 @pytest.mark.parametrize(

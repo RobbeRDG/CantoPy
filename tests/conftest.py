@@ -8,6 +8,15 @@ import shutil
 
 from cantopy import ResultPage, QueryResult, Recording, DownloadManager
 
+
+######################################################################
+#### CONSTANTS
+######################################################################
+TEST_MAX_WORKERS = 8
+TEST_DATA_BASE_FOLDER_PATH = (
+    "/workspaces/CantoPy/resources/test_resources/test_data_folders"
+)
+
 ######################################################################
 #### XENOCANTO RETURN COMPONENT FIXTURES
 ######################################################################
@@ -52,6 +61,23 @@ def example_xenocanto_query_response_page_2() -> Dict[str, str | Dict[str, str]]
     ) as file:
         return json.load(file)
 
+@pytest.fixture(scope="session")
+def example_fake_xenocanto_recording() -> Recording:
+    """An example Recording object that is not actually from XenoCanto.
+
+    Returns
+    -------
+    Recording
+        The created fake Recording object.
+    """
+
+    # Open the example fake XenoCanto recording
+    with open(
+        "resources/test_resources/example_fake_xenocanto_recording.json",
+        "r",
+        encoding="utf-8",
+    ) as file:
+        return Recording(json.load(file))
 
 @pytest.fixture(scope="session")
 def example_query_metadata_page_1(
@@ -232,10 +258,6 @@ def example_two_page_queryresult(
 #### DOWNLOADMANAGER FIXTURES
 ######################################################################
 
-TEST_DATA_BASE_FOLDER_PATH = (
-    "/workspaces/CantoPy/resources/test_resources/test_data_folders"
-)
-
 
 @pytest.fixture
 def empty_download_data_base_path() -> Generator[str, Any, Any]:
@@ -268,9 +290,9 @@ def partially_filled_download_data_base_path(
     Upon creation, this folder will already contain part of the recordings returned by
     the example pages 1 and 2 XenoCanto API response. This new folder has the following structure:
     |- folder_root
-    |---- spot-winged_wood_quail
+    |---- spot_winged_wood_quail
     |------- 581411.mp3
-    |------- spot-winged_wood_quail_recording_metadata.csv
+    |------- spot_winged_wood_quail_recording_metadata.csv
     |---- little_nightjar
     |------- 196385.mp3
     |------- 220365.mp3
@@ -342,7 +364,7 @@ def empty_data_folder_download_manager(empty_download_data_base_path: str):
     DownloadManager
         The created DownloadManager instance.
     """
-    return DownloadManager(empty_download_data_base_path)
+    return DownloadManager(empty_download_data_base_path, max_workers=TEST_MAX_WORKERS)
 
 
 @pytest.fixture
@@ -361,7 +383,9 @@ def partially_filled_data_folder_download_manager(
     DownloadManager
         The created DownloadManager instance.
     """
-    return DownloadManager(partially_filled_download_data_base_path)
+    return DownloadManager(
+        partially_filled_download_data_base_path, max_workers=TEST_MAX_WORKERS
+    )
 
 
 @pytest.fixture
@@ -375,7 +399,7 @@ def fake_data_folder_download_manager():
     DownloadManager
         The created DownloadManager instance.
     """
-    return DownloadManager("fake/path")
+    return DownloadManager("fake/path", max_workers=TEST_MAX_WORKERS)
 
 
 @pytest.fixture

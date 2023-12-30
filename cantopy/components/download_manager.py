@@ -1,23 +1,29 @@
-from cgitb import reset
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import as_completed
 from typing import Dict, List
 from cantopy.components.query_result import QueryResult
 from cantopy.components.recording import Recording
 from os.path import exists, join
 import pandas as pd
+import requests
+import os
 
 
 class DownloadManager:
     """A helper class for downloading the retrieved recordings from the XenoCanto APi."""
 
-    def __init__(self, data_base_path: str):
+    def __init__(self, data_base_path: str, max_workers: int = 1):
         """Init a DownloadManager instance
 
         Parameters
         ----------
         data_base_path : str
             The base data folder where we want our download manager to store the downloaded files.
+        max_workers : int, optional
+            The maximum number of workers to use for downloading the recordings, by default 1
         """
         self.data_base_path = data_base_path
+        self.max_workers = max_workers
 
     def download_all_recordings_in_queryresult(self, query_result: QueryResult):
         """Download all the recordings contained in the provided QueryResult.
@@ -37,13 +43,15 @@ class DownloadManager:
         )
 
         # Download the not-already-downloaded recordings
-        not_already_downloaded_recordings = filter(
-            lambda x: detected_already_downloaded_recordings[str(x.recording_id)]
-            == "new",
-            recordings,
+        not_already_downloaded_recordings = list(
+            filter(
+                lambda x: detected_already_downloaded_recordings[str(x.recording_id)]
+                == "new",
+                recordings,
+            )
         )
-        download_pass_or_fail = self._download_recordings(
-            not_already_downloaded_recordings
+        download_pass_or_fail = self._download_all_recordings(
+            not_already_downloaded_recordings,
         )
 
         # Generate the metadata dataframe for the downloaded recordings
@@ -54,6 +62,77 @@ class DownloadManager:
 
         # Udate the metadata file of each one of the downloaded animals
         self._update_animal_recordings_metadata_files(downloaded_recordings_metadata)
+
+    def _download_all_recordings(self, recordings: List[Recording]) -> Dict[str, str]:
+        """Download all recordings in the provided recordings list.
+
+        Parameters
+        ----------
+        recordings : List[Recording]
+            The list of recordings we want to download.
+
+        Returns
+        -------
+        Dict[str, str]
+            A dictionary containing the download status of each recording ("pass" or "fail").
+        """
+        download_pass_or_fail: Dict[str, str] = {}
+
+        with ThreadPoolExecutor(max_workers=self.max_workers) as executor:  # type: ignore
+            futures = [
+                executor.submit(self._download_single_recording, recording)
+                for recording in recordings
+            ]
+            results: str = [future.result() for future in as_completed(futures)]  # type: ignore
+
+        for recording, result in zip(recordings, results):
+            download_pass_or_fail[str(recording.recording_id)] = result
+
+        return download_pass_or_fail
+
+    def _download_single_recording(self, recording: Recording) -> str:
+        """Download a single recording.
+
+        Parameters
+        ----------
+        recording : Recording
+            The recording we want to download.
+
+        Returns
+        -------
+        str
+            The download status of the recording ("pass" or "fail").
+        """
+        # Generate the path where the recording should be located
+        recording_path = join(
+            self.data_base_path,
+            self._generate_animal_folder_name(recording.english_name),
+            f"{recording.recording_id}.mp3",
+        )
+
+        # Create the base animal folder if it does not exist yet
+        try:
+            os.mkdir(
+                join(
+                    self.data_base_path,
+                    self._generate_animal_folder_name(recording.english_name),
+                )
+            )
+        except Exception:
+            pass
+
+        # Download the recording
+        try:
+            response = requests.get(recording.audio_file_url)
+
+            if response.status_code != 200:
+                return "fail"
+
+            open(recording_path, "wb").write(response.content)
+
+            return "pass"
+        except Exception:
+            return "fail"
 
     def _update_animal_recordings_metadata_files(
         self, downloaded_recordings_metadata: pd.DataFrame
