@@ -1,10 +1,10 @@
 from typing import Dict
 from typing import List
-from components.result_page import ResultPage, Recording
+from xenocanto_components.result_page import ResultPage, Recording
 
 
 class QueryResult:
-    """Container for the ResultPages returned by the XenoCanto API in response to a given Query
+    """Wrapper container for storing all the ResultPages returned by the XenoCanto API in response to a given Query in one place.
 
     Attributes
     ----------

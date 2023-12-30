@@ -1,7 +1,7 @@
-from cantopy import ResultPage
+from cantopy.xenocanto_components import ResultPage
 import pytest
 
-from components.query_result import QueryResult
+from xenocanto_components.query_result import QueryResult
 
 
 @pytest.mark.parametrize(

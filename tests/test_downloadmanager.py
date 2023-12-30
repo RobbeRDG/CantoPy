@@ -1,4 +1,5 @@
-from cantopy import DownloadManager, QueryResult, Recording
+from cantopy import DownloadManager
+from cantopy.xenocanto_components import QueryResult, Recording
 import os
 from os.path import join
 import pytest
@@ -49,7 +50,7 @@ def test_downloadmanager_download_recordings(
         recordings_to_download.insert(0, example_fake_xenocanto_recording)
 
     # Run the download functionality on a single page
-    download_pass_or_fail = empty_data_folder_download_manager._download_all_recordings(
+    download_pass_or_fail = empty_data_folder_download_manager._download_all_recordings(  # type: ignore
         recordings_to_download
     )
 
@@ -161,7 +162,7 @@ def test_downloadmanager_detect_already_donwloaded_recordings(
         example_queryresult_fixture_name
     )
 
-    detected_already_downloaded_recordings = partially_filled_data_folder_download_manager._detect_already_downloaded_recordings(
+    detected_already_downloaded_recordings = partially_filled_data_folder_download_manager._detect_already_downloaded_recordings(  # type: ignore
         example_queryresult.get_all_recordings()
     )
 
@@ -227,7 +228,7 @@ def test_downloadmanager_generate_downloaeded_recording_metadata(
         example_queryresult_fixture_name
     )
     downloaded_recording_metadata = (
-        fake_data_folder_download_manager._generate_downloaded_recordings_metadata(
+        fake_data_folder_download_manager._generate_downloaded_recordings_metadata( # type: ignore
             example_queryresult.get_all_recordings(),
             download_pass_or_fail,
         )
@@ -290,7 +291,7 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
         metadata_to_add_fixture_name
     )
 
-    partially_filled_data_folder_download_manager._update_animal_recordings_metadata_files(
+    partially_filled_data_folder_download_manager._update_animal_recordings_metadata_files( # type: ignore
         to_add_test_recording_metadata
     )
 
@@ -377,7 +378,7 @@ def test_downloadmanager_generate_animal_folder_name(
     """
     # Spaces should be replaced by "_"
     assert (
-        fake_data_folder_download_manager._generate_animal_folder_name(
+        fake_data_folder_download_manager._generate_animal_folder_name( # type: ignore
             "test with just spaces"
         )
         == "test_with_just_spaces"
@@ -385,7 +386,7 @@ def test_downloadmanager_generate_animal_folder_name(
 
     # Everything should be lower case
     assert (
-        fake_data_folder_download_manager._generate_animal_folder_name(
+        fake_data_folder_download_manager._generate_animal_folder_name( # type: ignore
             "tEst CAPITAL Bird name"
         )
         == "test_capital_bird_name"
@@ -393,7 +394,7 @@ def test_downloadmanager_generate_animal_folder_name(
 
     # Special chars
     assert (
-        fake_data_folder_download_manager._generate_animal_folder_name(
+        fake_data_folder_download_manager._generate_animal_folder_name( # type: ignore
             "black-winged bird"
         )
         == "black_winged_bird"

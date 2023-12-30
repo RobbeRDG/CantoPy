@@ -1,4 +1,4 @@
-from cantopy import ResultPage
+from cantopy.xenocanto_components import ResultPage
 
 def test_resultpage_init(example_result_page_page_1: ResultPage):
     """Test for the initialisation of a ResultPage object.
@@ -10,7 +10,7 @@ def test_resultpage_init(example_result_page_page_1: ResultPage):
     """
 
     # Test page attribute
-    assert example_result_page_page_1.page == 1
+    assert example_result_page_page_1.page_id == 1
 
     # Just check if recording is also set,
     # but more detailed recording evaluation is in the Recording test section

@@ -6,7 +6,8 @@ from os.path import join
 import pandas as pd
 import shutil
 
-from cantopy import ResultPage, QueryResult, Recording, DownloadManager
+from cantopy import DownloadManager
+from cantopy.xenocanto_components import QueryResult, Recording, ResultPage
 
 
 ######################################################################
@@ -18,7 +19,7 @@ TEST_DATA_BASE_FOLDER_PATH = (
 )
 
 ######################################################################
-#### XENOCANTO RETURN COMPONENT FIXTURES
+#### XENOCANTO COMPONENT FIXTURES
 ######################################################################
 
 
@@ -61,6 +62,7 @@ def example_xenocanto_query_response_page_2() -> Dict[str, str | Dict[str, str]]
     ) as file:
         return json.load(file)
 
+
 @pytest.fixture(scope="session")
 def example_fake_xenocanto_recording() -> Recording:
     """An example Recording object that is not actually from XenoCanto.
@@ -78,6 +80,7 @@ def example_fake_xenocanto_recording() -> Recording:
         encoding="utf-8",
     ) as file:
         return Recording(json.load(file))
+
 
 @pytest.fixture(scope="session")
 def example_query_metadata_page_1(

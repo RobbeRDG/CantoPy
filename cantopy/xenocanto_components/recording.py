@@ -7,7 +7,7 @@ from pandas import Timestamp
 
 class Recording:
     """
-    Class representing a recording object.
+    Wrapper for storing a single recording returned by the Xeno Canto API.
 
     Attributes
     ----------

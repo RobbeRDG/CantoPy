@@ -1,8 +1,8 @@
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
 from typing import Dict, List
-from cantopy.components.query_result import QueryResult
-from cantopy.components.recording import Recording
+from cantopy.xenocanto_components.query_result import QueryResult
+from cantopy.xenocanto_components.recording import Recording
 from os.path import exists, join
 import pandas as pd
 import requests
@@ -10,7 +10,7 @@ import os
 
 
 class DownloadManager:
-    """A helper class for downloading the retrieved recordings from the XenoCanto APi."""
+    """A helper class for locally downloading retrieved information from the XenoCanto API."""
 
     def __init__(self, data_base_path: str, max_workers: int = 1):
         """Init a DownloadManager instance
