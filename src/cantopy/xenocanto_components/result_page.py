@@ -1,5 +1,5 @@
 from typing import List, Dict
-from cantopy.xenocanto_components.recording import Recording
+from src.cantopy.xenocanto_components.recording import Recording
 
 
 class ResultPage:
@@ -14,12 +14,14 @@ class ResultPage:
 
     """
 
-    def __init__(self, single_page_query_response: Dict[str, str | Dict[str, str]]):
+    def __init__(
+        self, single_page_query_response: Dict[str, str | int | List[Dict[str, str]]]
+    ):
         """Create a ResultPage object from the XenoCanto json response
 
         Parameters
         ----------
-        single_page_query_response : Dict[str, str]
+        single_page_query_response : Dict[str, Any]
             The query response from the XenoCanto API.
 
         Raises
@@ -31,21 +33,21 @@ class ResultPage:
         """
 
         # Set the page id
-        if isinstance(single_page_query_response["page"], str):
-            self.page_id = int(single_page_query_response["page"])
+        if isinstance(single_page_query_response["page"], int):
+            self.page_id = single_page_query_response["page"]
         else:
             raise TypeError(
-                f"Error creating a new ResultPage instance from the XenoCanto API response: \\
+                f"Error creating a new ResultPage instance from the XenoCanto API response: \
                 The page id returned by the XenoCanto API could not be read as a string: {single_page_query_response['page']}"
             )
 
         # Set the recordings
         self.recordings: List[Recording] = []
+
+        if not isinstance(single_page_query_response["recordings"], list):
+            raise TypeError(
+                f"Error creating a new ResultPage instance from the XenoCanto API response: \
+                The recordings returned by the XenoCanto API could not be read as a list: {single_page_query_response['recordings']}"
+            )
         for query_response_recording in single_page_query_response["recordings"]:
-            if isinstance(query_response_recording, dict):
-                self.recordings.append(Recording(query_response_recording))
-            else:
-                raise TypeError(
-                    f"Error creating a new ResultPage instance from the XenoCanto API response: \\
-                    a recording returned by the XenoCanto API could not be read as a dictionary: {query_response_recording}"
-                )
+            self.recordings.append(Recording(query_response_recording))

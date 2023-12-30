@@ -2,9 +2,7 @@ from typing import Dict, List, Tuple
 import requests
 import urllib.parse
 
-from cantopy.xenocanto_components import Query, QueryResult
-from xenocanto_components.result_page import ResultPage
-
+from src.cantopy.xenocanto_components import Query, QueryResult, ResultPage
 
 class CantoPy:
     """CantoPy, the XenoCanto API wrapper

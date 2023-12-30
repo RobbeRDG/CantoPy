@@ -6,8 +6,8 @@ from os.path import join
 import pandas as pd
 import shutil
 
-from cantopy import DownloadManager
-from cantopy.xenocanto_components import QueryResult, Recording, ResultPage
+from src.cantopy import DownloadManager
+from src.cantopy.xenocanto_components import QueryResult, Recording, ResultPage
 
 
 ######################################################################
@@ -24,7 +24,9 @@ TEST_DATA_BASE_FOLDER_PATH = (
 
 
 @pytest.fixture(scope="session")
-def example_xenocanto_query_response_page_1() -> Dict[str, str | Dict[str, str]]:
+def example_xenocanto_query_response_page_1() -> (
+    Dict[str, str | int | List[Dict[str, str]]]
+):
     """An example dict of the query response of the XenoCanto API when sending a
     Query to recieve the result page with id 1.
 
@@ -44,13 +46,15 @@ def example_xenocanto_query_response_page_1() -> Dict[str, str | Dict[str, str]]
 
 
 @pytest.fixture(scope="session")
-def example_xenocanto_query_response_page_2() -> Dict[str, str | Dict[str, str]]:
+def example_xenocanto_query_response_page_2() -> (
+    Dict[str, str | int | List[Dict[str, str]]]
+):
     """An example dict of the query response of the XenoCanto API when sending a
     Query to recieve the result page with id 2.
 
     Returns
     -------
-    Dict[str, str]
+    Dict[str, str | int | List[Dict[str, str]]]
         The dictionary representation of an example query response of the XenoCanto API.
     """
 
@@ -84,67 +88,100 @@ def example_fake_xenocanto_recording() -> Recording:
 
 @pytest.fixture(scope="session")
 def example_query_metadata_page_1(
-    example_xenocanto_query_response_page_1: Dict[str, str]
-) -> Dict[str, int]:
+    example_xenocanto_query_response_page_1: Dict[str, str | int | List[Dict[str, str]]]
+) -> Dict[str, str | int]:
     """Build a response metadata dict from the page 1 example XenoCanto API query response.
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_1 : Dict[str, str]
+    example_xenocanto_query_response_page_1 : Dict[str, str | int | List[Dict[str, str]]]
         The dictionary representation of example XenoCanto API query response.
 
     Returns
     -------
-    Dict[str, int]
+    Dict[str, str | int]
         Extracted response metadata from the example page 1 XenoCanto API query response.
+
+    Raises
+    ------
+    ValueError
+        If the type of values assigned to numRecordings, numSpecies or numPages keys in
+        the query response dict is not a string.
     """
-    return {
-        "available_num_recordings": int(
-            example_xenocanto_query_response_page_1["numRecordings"]
-        ),
-        "available_num_species": int(
-            example_xenocanto_query_response_page_1["numSpecies"]
-        ),
-        "available_num_pages": int(example_xenocanto_query_response_page_1["numPages"]),
-    }
+
+    if (
+        isinstance(example_xenocanto_query_response_page_1["numRecordings"], str)
+        and isinstance(example_xenocanto_query_response_page_1["numSpecies"], str)
+        and isinstance(example_xenocanto_query_response_page_1["numPages"], int)
+    ):
+        return {
+            "available_num_recordings": int(
+                example_xenocanto_query_response_page_1["numRecordings"]
+            ),
+            "available_num_species": int(
+                example_xenocanto_query_response_page_1["numSpecies"]
+            ),
+            "available_num_pages": example_xenocanto_query_response_page_1["numPages"],
+        }
+    else:
+        raise ValueError(
+            f"Unexpected type of values assigned to numRecordings, numSpecies or numPages keys: \
+            {example_xenocanto_query_response_page_1}"
+        )
 
 
 @pytest.fixture(scope="session")
 def example_query_metadata_page_2(
-    example_xenocanto_query_response_page_2: Dict[str, str]
-) -> Dict[str, int]:
+    example_xenocanto_query_response_page_2: Dict[str, str | int | List[Dict[str, str]]]
+) -> Dict[str, str | int]:
     """Build a response metadata dict from the page 2 example XenoCanto API query response.
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_2 : Dict[str, str]
+    example_xenocanto_query_response_page_2 : Dict[str, str | int | List[Dict[str, str]]]
         The dictionary representation of example page 2 XenoCanto API query response.
 
     Returns
     -------
-    Dict[str, int]
+    Dict[str, str | int]
         Extracted response metadata from the example XenoCanto API query response.
+
+    Raises
+    ------
+    ValueError
+        If the type of values assigned to numRecordings, numSpecies or numPages keys in
+        the query response dict is not a string.
     """
-    return {
-        "available_num_recordings": int(
-            example_xenocanto_query_response_page_2["numRecordings"]
-        ),
-        "available_num_species": int(
-            example_xenocanto_query_response_page_2["numSpecies"]
-        ),
-        "available_num_pages": int(example_xenocanto_query_response_page_2["numPages"]),
-    }
+    if (
+        isinstance(example_xenocanto_query_response_page_2["numRecordings"], str)
+        and isinstance(example_xenocanto_query_response_page_2["numSpecies"], str)
+        and isinstance(example_xenocanto_query_response_page_2["numPages"], int)
+    ):
+        return {
+            "available_num_recordings": int(
+                example_xenocanto_query_response_page_2["numRecordings"]
+            ),
+            "available_num_species": int(
+                example_xenocanto_query_response_page_2["numSpecies"]
+            ),
+            "available_num_pages": example_xenocanto_query_response_page_2["numPages"],
+        }
+    else:
+        raise ValueError(
+            f"Unexpected type of values assigned to numRecordings, numSpecies or numPages keys: \
+            {example_xenocanto_query_response_page_2}"
+        )
 
 
 @pytest.fixture(scope="session")
 def example_result_page_page_1(
-    example_xenocanto_query_response_page_1: Dict[str, str | Dict[str, str]]
+    example_xenocanto_query_response_page_1: Dict[str, str | int | List[Dict[str, str]]]
 ) -> ResultPage:
     """Build a ResultPage object from the example page 1 XenoCanto API query response.
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_1 : Dict[str, str  |  Dict[str, str]]
+    example_xenocanto_query_response_page_1 : Dict[str, str | int | List[Dict[str, str]]]
         The dictionary representation of example page 1 XenoCanto API query response.
 
     Returns
@@ -157,13 +194,13 @@ def example_result_page_page_1(
 
 @pytest.fixture(scope="session")
 def example_result_page_page_2(
-    example_xenocanto_query_response_page_2: Dict[str, str | Dict[str, str]]
+    example_xenocanto_query_response_page_2: Dict[str, str | int | List[Dict[str, str]]]
 ) -> ResultPage:
     """Build a ResultPage object from the example page 2 XenoCanto API query response.
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_2 : Dict[str, str  |  Dict[str, str]]
+    example_xenocanto_query_response_page_2 : Dict[str, str | int | List[Dict[str, str]]]
         The dictionary representation of example page 2 XenoCanto API query response.
 
     Returns
@@ -176,14 +213,14 @@ def example_result_page_page_2(
 
 @pytest.fixture(scope="session")
 def example_recording_1_from_example_xenocanto_query_response_page_1(
-    example_xenocanto_query_response_page_1: Dict[str, str | List[Dict[str, str]]]
+    example_xenocanto_query_response_page_1: Dict[str, str | int | List[Dict[str, str]]]
 ) -> Recording:
     """Build a Recording object based on the first recording in the example page 1
     XenoCanto API query response.
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_1 : Dict[str, str  |  Dict[str, str]]
+    example_xenocanto_query_response_page_1 : Dict[str, str | int | List[Dict[str, str]]]
         The dictionary representation of example page 1 XenoCanto API query response.
 
     Returns
@@ -193,9 +230,10 @@ def example_recording_1_from_example_xenocanto_query_response_page_1(
     """
 
     # Handle the string case, which should not be possible
-    if isinstance(example_xenocanto_query_response_page_1["recordings"], str):
+    if not isinstance(example_xenocanto_query_response_page_1["recordings"], list):
         raise ValueError(
-            "The returned recordings instance is a string, but should be a list of dictionaries"
+            f"Unexpected type of values assigned to recordings key: \
+            {example_xenocanto_query_response_page_1['recordings']}"
         )
 
     return Recording(example_xenocanto_query_response_page_1["recordings"][0])
@@ -203,7 +241,7 @@ def example_recording_1_from_example_xenocanto_query_response_page_1(
 
 @pytest.fixture(scope="session")
 def example_single_page_queryresult(
-    example_query_metadata_page_1: Dict[str, int],
+    example_query_metadata_page_1: Dict[str, str | int],
     example_result_page_page_1: ResultPage,
 ) -> QueryResult:
     """Build a single-page QueryResult object based on the example page 1 XenoCanto API
@@ -211,7 +249,7 @@ def example_single_page_queryresult(
 
     Parameters
     ----------
-    example_query_metadata_page_1 : Dict[str, int]
+    example_query_metadata_page_1 : Dict[str, str | int | List[Dict[str, str]]]
         The extracted metadata from the example page 1 XenoCanto API query response.
     example_result_page : ResultPage
         The ResultPage object created from the example page 1 XenoCanto API query response
@@ -221,12 +259,13 @@ def example_single_page_queryresult(
     QueryResult
         The constructed single-page QueryResult object.
     """
+
     return QueryResult(example_query_metadata_page_1, [example_result_page_page_1])
 
 
 @pytest.fixture(scope="session")
 def example_two_page_queryresult(
-    example_query_metadata_page_1: Dict[str, int],
+    example_query_metadata_page_1: Dict[str, str | int],
     example_result_page_page_1: ResultPage,
     example_result_page_page_2: ResultPage,
 ) -> QueryResult:

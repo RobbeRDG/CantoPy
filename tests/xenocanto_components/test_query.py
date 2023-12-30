@@ -1,5 +1,5 @@
 import pytest
-from cantopy.xenocanto_components import Query
+from src.cantopy.xenocanto_components import Query
 
 
 @pytest.fixture

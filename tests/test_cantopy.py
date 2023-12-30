@@ -1,6 +1,6 @@
 import pytest
-from cantopy import CantoPy
-from cantopy.xenocanto_components import Query
+from src.cantopy import CantoPy
+from src.cantopy.xenocanto_components import Query
 
 
 @pytest.fixture

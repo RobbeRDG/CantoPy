@@ -1,8 +1,8 @@
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
 from typing import Dict, List
-from cantopy.xenocanto_components.query_result import QueryResult
-from cantopy.xenocanto_components.recording import Recording
+from src.cantopy.xenocanto_components.query_result import QueryResult
+from src.cantopy.xenocanto_components.recording import Recording
 from os.path import exists, join
 import pandas as pd
 import requests

@@ -1,6 +1,6 @@
 from typing import Dict
 from typing import List
-from xenocanto_components.result_page import ResultPage, Recording
+from src.cantopy.xenocanto_components.result_page import ResultPage, Recording
 
 
 class QueryResult:
@@ -21,12 +21,12 @@ class QueryResult:
 
     """
 
-    def __init__(self, query_metadata: Dict[str, int], result_pages: List[ResultPage]):
+    def __init__(self, query_metadata: Dict[str, str | int], result_pages: List[ResultPage]):
         """Init a QueryResult container.
 
         Parameters
         ----------
-        query_metadata : Dict[str, int]
+        query_metadata : Dict[str, str | int]
             Dictionary containing metadata information about the query results,
             the dict keys are: "available_num_recordings", "available_num_species", "available_num_pages".
         result_pages : List[ResultPage]
@@ -35,8 +35,8 @@ class QueryResult:
         """
 
         # Set the query metadata attributes
-        self.available_num_recordings = query_metadata["available_num_recordings"]
-        self.available_num_species = query_metadata["available_num_species"]
+        self.available_num_recordings = int(query_metadata["available_num_recordings"])
+        self.available_num_species = int(query_metadata["available_num_species"])
         self.available_num_pages = query_metadata["available_num_pages"]
 
         # Set the result pages
