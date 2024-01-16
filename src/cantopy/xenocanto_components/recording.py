@@ -96,66 +96,76 @@ class Recording:
             The dict of the recording returned by the XenoCanto API
         """
         # Extract the recording length from the given string representation
-        length_in_minutes = recording_data["length"].split(":")
+        length_in_minutes = recording_data.get("length", "").split(":")
         recording_length = timedelta(
             minutes=int(length_in_minutes[0]), seconds=int(length_in_minutes[1])
         )
 
         # Extract the full timestamp from the given string representation
-        recording_date = recording_data["date"]
-        recording_time = recording_data["time"]
+        recording_date = recording_data.get("date", "")
+        recording_time = recording_data.get("time", "")
         recording_timestamp = (
             Timestamp(f"{recording_date}T{recording_time}")
-            if recording_time != "?"  # If time is not set
+            if not (recording_time == "?" or recording_time == "")  # If time is not set
             else Timestamp(recording_date)
         )
 
         # Extract the uploaded timestamp
-        uploaded_timestamp = datetime.fromisoformat(recording_data["uploaded"])
+        uploaded_timestamp = datetime.fromisoformat(recording_data.get("uploaded", ""))
 
         ####################################################################
         # Set the Recording object attributes
         ####################################################################
 
         # Id
-        self.recording_id = int(recording_data["id"])
+        self.recording_id = int(recording_data.get("id", 0))
 
         # Animal information
-        self.generic_name = recording_data["gen"]
-        self.specific_name = recording_data["sp"]
-        self.subspecies_name = recording_data["ssp"]
-        self.species_group = recording_data["group"]
-        self.english_name = recording_data["en"]
-        self.sound_type = recording_data["type"]
-        self.sex = recording_data["sex"]
-        self.life_stage = recording_data["stage"]
-        self.background_species = recording_data["also"]
-        self.animal_seen = recording_data["animal-seen"]
+        self.generic_name = recording_data.get("gen", "")
+        self.specific_name = recording_data.get("sp", "")
+        self.subspecies_name = recording_data.get("ssp", "")
+        self.species_group = recording_data.get("group", "")
+        self.english_name = recording_data.get("en", "")
+        self.sound_type = recording_data.get("type", "")
+        self.sex = recording_data.get("sex", "")
+        self.life_stage = recording_data.get("stage", "")
+        self.background_species = recording_data.get("also", "")
+        self.animal_seen = recording_data.get("animal-seen", "")
 
         # Recording information
-        self.recordist_name = recording_data["rec"]
-        self.recording_method = recording_data["method"]
-        self.license_url = recording_data["lic"]
-        self.quality_rating = recording_data["q"]
+        self.recordist_name = recording_data.get("rec", "")
+        self.recording_method = recording_data.get("method", "")
+        self.license_url = recording_data.get("lic", "")
+        self.quality_rating = recording_data.get("q", "")
         self.recording_length = recording_length
         self.recording_timestamp = recording_timestamp
-        self.date = recording_data["date"]
+        self.date = recording_data.get("date", "")
         self.upload_timestamp = uploaded_timestamp
-        self.recording_url = recording_data["url"]
-        self.audio_file_url = recording_data["file"]
-        self.recordist_remarks = recording_data["rmk"]
-        self.playback_used = recording_data["playback-used"]
-        self.automatic_recording = recording_data["auto"]
-        self.recording_device = recording_data["dvc"]
-        self.microphone_used = recording_data["mic"]
-        self.sample_rate = int(recording_data["smp"])
+        self.recording_url = recording_data.get("url", "")
+        self.audio_file_url = recording_data.get("file", "")
+        self.recordist_remarks = recording_data.get("rmk", "")
+        self.playback_used = recording_data.get("playback-used", "")
+        self.automatic_recording = recording_data.get("auto", "")
+        self.recording_device = recording_data.get("dvc", "")
+        self.microphone_used = recording_data.get("mic", "")
+        self.sample_rate = (
+            int(recording_data.get("smp", 0)) if recording_data.get("smp", 0) else 0
+        )
 
         # Location information
-        self.country = recording_data["cnt"]
-        self.locality_name = recording_data["loc"]
-        self.latitude = float(recording_data["lat"]) if recording_data["lat"] else None
-        self.longitude = float(recording_data["lng"]) if recording_data["lng"] else None
-        self.temperature = recording_data["temp"]
+        self.country = recording_data.get("cnt", "")
+        self.locality_name = recording_data.get("loc", "")
+        self.latitude = (
+            float(recording_data.get("lat", ""))
+            if recording_data.get("lat", "")
+            else None
+        )
+        self.longitude = (
+            float(recording_data.get("lng", ""))
+            if recording_data.get("lng", "")
+            else None
+        )
+        self.temperature = recording_data.get("temp", "")
 
     def to_dataframe_row(self) -> pd.DataFrame:
         """Convert the Recording object to a pandas DataFrame row.

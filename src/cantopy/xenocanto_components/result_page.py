@@ -1,5 +1,5 @@
 from typing import List, Dict
-from src.cantopy.xenocanto_components.recording import Recording
+from cantopy.xenocanto_components.recording import Recording
 
 
 class ResultPage:

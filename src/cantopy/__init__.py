@@ -1,2 +1,3 @@
-from src.cantopy.cantopy import CantoPy # type: ignore
-from src.cantopy.download_manager import DownloadManager # type: ignore
+from cantopy import fetch  # type: ignore
+from cantopy import download  # type: ignore
+from cantopy import xenocanto_components # type: ignore

@@ -1,12 +1,12 @@
 from typing import Dict, List, Tuple
 import requests
 import urllib.parse
+from cantopy.xenocanto_components import Query, QueryResult, ResultPage
 
-from src.cantopy.xenocanto_components import Query, QueryResult, ResultPage
 
-class CantoPy:
-    """CantoPy, the XenoCanto API wrapper
-    
+class FetchManager:
+    """Class for managing the fetching of data from the Xeno Canto API.
+
     Attributes
     ----------
     base_url : str
@@ -15,8 +15,7 @@ class CantoPy:
     """
 
     def __init__(self) -> None:
-        """Init the CantoPy instance
-        """
+        """Init the CantoPy instance"""
         self.base_url = "https://www.xeno-canto.org/api/2/recordings"
 
     def send_query(self, query: Query, max_pages: int = 1) -> QueryResult:
@@ -43,14 +42,14 @@ class CantoPy:
         result_pages.append(result_page_1)
 
         # Fetch the other requested result pages
-        for i in range(1, min(max_pages, query_metadata["available_num_pages"])):
+        for i in range(1, min(max_pages, int(query_metadata["available_num_pages"]))):
             result_pages.append(self._fetch_result_page(query_str, page=i + 1)[1])
 
         return QueryResult(query_metadata, result_pages)
 
     def _fetch_result_page(
         self, query_str: str, page: int
-    ) -> Tuple[Dict[str, int], ResultPage]:
+    ) -> Tuple[Dict[str, str | int], ResultPage]:
         """Fetch a specific page from the XenoCanto API.
 
         Parameters

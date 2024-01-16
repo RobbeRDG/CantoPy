@@ -5,9 +5,13 @@ import os
 from os.path import join
 import pandas as pd
 import shutil
+import sys
 
-from src.cantopy import DownloadManager
-from src.cantopy.xenocanto_components import QueryResult, Recording, ResultPage
+print(sys.path)
+
+from cantopy.xenocanto_components import QueryResult, Recording, ResultPage
+from cantopy.download import DownloadManager
+
 
 
 ######################################################################
