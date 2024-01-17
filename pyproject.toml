@@ -1,6 +1,6 @@
 [project]
     name = "CantoPy"
-    version = "0.0.2"
+    version = "0.0.3"
     authors = [
     { name="Robbe De Groeve", email="robbedegroeve@gmail.com" },
     ]
