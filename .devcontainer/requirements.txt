@@ -1,5 +1,2 @@
-notebook
 pandas
-pytest
-build
-twine
+requests
