@@ -1,7 +1,7 @@
 from typing import Dict
 from typing import List
-from src.cantopy.xenocanto_components.result_page import ResultPage, Recording
-
+from cantopy.xenocanto_components.result_page import ResultPage
+from cantopy.xenocanto_components.recording import Recording
 
 class QueryResult:
     """Wrapper container for storing all the ResultPages returned by the XenoCanto API in response to a given Query in one place.

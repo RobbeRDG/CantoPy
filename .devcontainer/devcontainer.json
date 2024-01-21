@@ -19,4 +19,5 @@
 			],
 		}
 	},
+	"postStartCommand": "poetry install"
 }

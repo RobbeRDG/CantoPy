@@ -1,23 +1,21 @@
-[project]
-    name = "CantoPy"
-    version = "0.0.1"
-    authors = [
-    { name="Robbe De Groeve", email="robbedegroeve@gmail.com" },
-    ]
-    description = "A XenoCanto API wrapper for Python"
-    readme = "readme.md"
-    requires-python = ">=3.12"
-    classifiers = [
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ]
+[tool.poetry]
+name = "cantopy"
+version = "0.1.1"
+description = "A XenoCanto API wrapper for Python"
+authors = ["RobbeRDG <robbedegroeve@gmail.com>"]
+license = "MIT"
+readme = "readme.md"
+repository = "https://github.com/RobbeRDG/CantoPy"
 
-[project.urls]
-    Homepage = "https://github.com/RobbeRDG/CantoPy"
-    Issues = "https://github.com/RobbeRDG/CantoPy/issues"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.2.0"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
 
 [build-system]
-    requires = ["hatchling"]
-    build-backend = "hatchling.build"
-    
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

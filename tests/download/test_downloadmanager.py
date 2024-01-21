@@ -1,5 +1,5 @@
-from src.cantopy import DownloadManager
-from src.cantopy.xenocanto_components import QueryResult, Recording
+from cantopy.download import DownloadManager
+from cantopy.xenocanto_components import QueryResult, Recording
 import os
 from os.path import join
 import pytest

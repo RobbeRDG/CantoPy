@@ -1,8 +1,5 @@
-from src.cantopy.xenocanto_components import ResultPage
+from cantopy.xenocanto_components import ResultPage, QueryResult
 import pytest
-
-from src.cantopy.xenocanto_components.query_result import QueryResult
-
 
 @pytest.mark.parametrize(
     "example_queryresult_fixture_name, expected_num_pages",

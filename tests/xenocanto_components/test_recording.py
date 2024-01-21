@@ -1,4 +1,4 @@
-from src.cantopy.xenocanto_components import Recording
+from cantopy.xenocanto_components import Recording
 
 
 def test_recording_init(example_recording_1_from_example_xenocanto_query_response_page_1: Recording):

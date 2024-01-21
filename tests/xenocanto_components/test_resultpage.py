@@ -1,4 +1,4 @@
-from src.cantopy.xenocanto_components import ResultPage
+from cantopy.xenocanto_components import ResultPage
 
 def test_resultpage_init(example_result_page_page_1: ResultPage):
     """Test for the initialisation of a ResultPage object.
