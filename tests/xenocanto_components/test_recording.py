@@ -16,7 +16,7 @@ def test_recording_init(
     # See if all recording fields are captured
     assert (
         example_recording_1_from_example_xenocanto_query_response_page_1.recording_id
-        == 581412
+        == "581412"
     )
     assert (
         example_recording_1_from_example_xenocanto_query_response_page_1.generic_name
@@ -52,11 +52,11 @@ def test_recording_init(
     )
     assert (
         example_recording_1_from_example_xenocanto_query_response_page_1.latitude
-        == -15.3915
+        == "-15.3915"
     )
     assert (
         example_recording_1_from_example_xenocanto_query_response_page_1.longitude
-        == -39.5643
+        == "-39.5643"
     )
     assert (
         example_recording_1_from_example_xenocanto_query_response_page_1.sound_type
@@ -91,19 +91,19 @@ def test_recording_init(
         == "A"
     )
     assert (
-        example_recording_1_from_example_xenocanto_query_response_page_1.recording_length.seconds
-        == 194
+        example_recording_1_from_example_xenocanto_query_response_page_1.recording_length
+        == "3:14"
     )
     assert (
-        example_recording_1_from_example_xenocanto_query_response_page_1.recording_timestamp.strftime(
-            "%Y-%m-%d %X"
-        )
-        == "2020-08-02 08:00:00"
+        example_recording_1_from_example_xenocanto_query_response_page_1.recording_date
+        == "2020-08-02"
     )
     assert (
-        example_recording_1_from_example_xenocanto_query_response_page_1.upload_timestamp.strftime(
-            "%Y-%m-%d"
-        )
+        example_recording_1_from_example_xenocanto_query_response_page_1.recording_time
+        == "08:00"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.upload_date
         == "2020-08-09"
     )
     assert (
@@ -136,7 +136,7 @@ def test_recording_init(
     )
     assert (
         example_recording_1_from_example_xenocanto_query_response_page_1.sample_rate
-        == 48000
+        == "48000"
     )
 
 
@@ -158,7 +158,7 @@ def test_to_dataframe_row(
     )
 
     # test if the dataframe row contains the correct information
-    assert example_recording_df_row["recording_id"][0] == 581412
+    assert example_recording_df_row["recording_id"][0] == "581412"
     assert example_recording_df_row["generic_name"][0] == "Odontophorus"
     assert example_recording_df_row["specific_name"][0] == "capueira"
     assert example_recording_df_row["subspecies_name"][0] == "plumbeicollis"
@@ -170,8 +170,8 @@ def test_to_dataframe_row(
         example_recording_df_row["locality_name"][0]
         == "RPPN Serra Bonita, Camacan-BA, Bahia"
     )
-    assert example_recording_df_row["latitude"][0] == -15.3915
-    assert example_recording_df_row["longitude"][0] == -39.5643
+    assert example_recording_df_row["latitude"][0] == "-15.3915"
+    assert example_recording_df_row["longitude"][0] == "-39.5643"
     assert example_recording_df_row["sound_type"][0] == "duet, song"
     assert example_recording_df_row["sex"][0] == "female, male"
     assert example_recording_df_row["life_stage"][0] == "adult"
@@ -186,9 +186,10 @@ def test_to_dataframe_row(
         == "//creativecommons.org/licenses/by-nc-sa/4.0/"
     )
     assert example_recording_df_row["quality_rating"][0] == "A"
-    assert example_recording_df_row["recording_length"][0].seconds == 194  # type: ignore
-    assert example_recording_df_row["recording_timestamp"][0].strftime("%Y-%m-%d %X") == "2020-08-02 08:00:00"  # type: ignore
-    assert example_recording_df_row["upload_timestamp"][0].strftime("%Y-%m-%d") == "2020-08-09"  # type: ignore
+    assert example_recording_df_row["recording_length"][0] == "3:14"
+    assert example_recording_df_row["recording_time"][0] == "08:00"
+    assert example_recording_df_row["recording_date"][0] == "2020-08-02"
+    assert example_recording_df_row["upload_date"][0] == "2020-08-09"
     assert example_recording_df_row["background_species"][0] == ["Sclerurus scansor"]
     assert example_recording_df_row["recordist_remarks"][0] == ""
     assert example_recording_df_row["animal_seen"][0] == "yes"
@@ -196,20 +197,5 @@ def test_to_dataframe_row(
     assert example_recording_df_row["automatic_recording"][0] == "no"
     assert example_recording_df_row["recording_device"][0] == ""
     assert example_recording_df_row["microphone_used"][0] == ""
-    assert example_recording_df_row["sample_rate"][0] == 48000
+    assert example_recording_df_row["sample_rate"][0] == "48000"
 
-
-def test_zero_day_date_recording(example_zero_day_xenocanto_recording: Recording):
-    """Test if the day of a date of a recording is set to zero when given a recording
-    containing a date where the day part is set to 0.
-
-    Parameters
-    ----------
-    example_zero_day_xenocanto_recording : Recording
-        A Recording object based on a XenoCanto API query response where the recording date is set to 2003-03-00.
-    """
-
-    # Check if the recording date is set to the current date
-    assert example_zero_day_xenocanto_recording.recording_timestamp.year == 2003
-    assert example_zero_day_xenocanto_recording.recording_timestamp.month == 3
-    assert example_zero_day_xenocanto_recording.recording_timestamp.day == 1

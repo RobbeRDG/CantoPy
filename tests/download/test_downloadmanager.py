@@ -238,35 +238,35 @@ def test_downloadmanager_generate_downloaeded_recording_metadata(
     if example_queryresult_fixture_name == "example_single_page_queryresult":
         assert len(downloaded_recording_metadata) == 2
         assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == 581412  # type: ignore
+            downloaded_recording_metadata["recording_id"] == "581412"  # type: ignore
         ].equals(example_queryresult.result_pages[0].recordings[0].to_dataframe_row())
         assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == 581411
+            downloaded_recording_metadata["recording_id"] == "581411"
         ].empty
         assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == 427716  # type: ignore
+            downloaded_recording_metadata["recording_id"] == "427716"  # type: ignore
         ].equals(
             example_queryresult.result_pages[0].recordings[2].to_dataframe_row()  # type: ignore
         )
     elif example_queryresult_fixture_name == "example_two_page_queryresult":
         assert len(downloaded_recording_metadata) == 4
         assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == 581412  # type: ignore
+            downloaded_recording_metadata["recording_id"] == "581412"  # type: ignore
         ].equals(example_queryresult.result_pages[0].recordings[0].to_dataframe_row())
         assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == 581411
+            downloaded_recording_metadata["recording_id"] == "581411"
         ].empty
         assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == 427716  # type: ignore
+            downloaded_recording_metadata["recording_id"] == "427716"  # type: ignore
         ].equals(example_queryresult.result_pages[0].recordings[2].to_dataframe_row())
         assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == 220366
+            downloaded_recording_metadata["recording_id"] == "220366"
         ].empty
         assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == 220365  # type: ignore
+            downloaded_recording_metadata["recording_id"] == "220365"  # type: ignore
         ].equals(example_queryresult.result_pages[1].recordings[1].to_dataframe_row())
         assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == 196385  # type: ignore
+            downloaded_recording_metadata["recording_id"] == "196385"  # type: ignore
         ].equals(example_queryresult.result_pages[1].recordings[2].to_dataframe_row())
 
 
