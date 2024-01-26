@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cantopy"
-version = "0.1.5"
+version = "0.1.6"
 description = "A XenoCanto API wrapper for Python"
 authors = ["RobbeRDG <robbedegroeve@gmail.com>"]
 license = "MIT"
