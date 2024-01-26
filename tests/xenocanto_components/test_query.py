@@ -12,11 +12,11 @@ def query_for_tostring_test() -> Query:
         An example Query object.
     """
     return Query(
-        name="common blackbird",
-        cnt="Netherlands",
+        species_name="common blackbird",
+        country="Netherlands",
         song_type="alarm call",
-        stage="=adult",
-        q=">C",
+        life_stage="=adult",
+        quality=">C",
     )
 
 

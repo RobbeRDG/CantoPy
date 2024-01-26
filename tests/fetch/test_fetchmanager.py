@@ -9,7 +9,7 @@ def fetch_manager():
 
 @pytest.fixture
 def query():
-    return Query(name="common blackbird", q="A")
+    return Query(species_name="common blackbird", quality="A")
 
 
 def test_query_singlepage(fetch_manager: FetchManager, query: Query):
