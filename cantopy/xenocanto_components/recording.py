@@ -1,8 +1,6 @@
-from datetime import timedelta, datetime
 from typing import Dict
 
 import pandas as pd
-from pandas import Timestamp
 
 
 class Recording:
@@ -11,7 +9,7 @@ class Recording:
 
     Attributes
     ----------
-    recording_id : int
+    recording_id : str
         The recording id number of the recording on xeno-canto.
     generic_name : str
         Generic name of the species.
@@ -29,9 +27,9 @@ class Recording:
         Country where the recording was made.
     locality_name : str
         Name of the locality.
-    latitude : float
+    latitude : str
         Latitude of the recording in decimal coordinates.
-    longitude : float
+    longitude : str
         Longitude of the recording in decimal coordinates.
     sound_type : str
         Sound type of the recording (combining both predefined terms such as 'call' or 'song'
@@ -50,11 +48,11 @@ class Recording:
         URL describing the license of this recording.
     quality_rating : str
         Current quality rating for the recording.
-    recording_length : timedelta
+    recording_length : str
         Length of the recording in a timedelta.
-    recording_timestamp : datetime
+    recording_timestamp : str
         Timestamp that the recording was made.
-    upload_timestamp : datetime
+    upload_date : str
         Date that the recording was uploaded to xeno-canto.
     background_species : list
         An array with the identified background species in the recording.
@@ -66,14 +64,13 @@ class Recording:
         Was playback used to lure the animal?
     temperature : str
         Temperature during recording (applicable to specific groups only).
-
     automatic_recording : str
         Automatic (non-supervised) recording?
     recording_device : str
         Recording device used.
     microphone_used : str
         Microphone used.
-    sample_rate : int
+    sample_rate : str
         Sample rate.
 
     Notes
@@ -95,37 +92,9 @@ class Recording:
         recording_data : Dict[str, str]
             The dict of the recording returned by the XenoCanto API
         """
-        # Extract the recording length from the given string representation
-        length_in_minutes = recording_data.get("length", "").split(":")
-        recording_length = timedelta(
-            minutes=int(length_in_minutes[0]), seconds=int(length_in_minutes[1])
-        )
-
-        # Extract the full timestamp from the given string representation
-        recording_date = recording_data.get("date", "")
-        recording_time = recording_data.get("time", "")
-
-        # In some cases, a date is returned with the day value set to 0 (e.g. "2020-08-00")
-        # In this case, set the day value to 1
-        if recording_date.endswith("-00"):
-            recording_date = recording_date[:-2] + "01"
-
-        # Create a Timestamp object from the date and time
-        recording_timestamp = (
-            Timestamp(f"{recording_date}T{recording_time}")
-            if not (recording_time == "?" or recording_time == "")  # If time is not set
-            else Timestamp(recording_date)
-        )
-
-        # Extract the uploaded timestamp
-        uploaded_timestamp = datetime.fromisoformat(recording_data.get("uploaded", ""))
-
-        ####################################################################
-        # Set the Recording object attributes
-        ####################################################################
 
         # Id
-        self.recording_id = int(recording_data.get("id", 0))
+        self.recording_id = recording_data.get("id", 0)
 
         # Animal information
         self.generic_name = recording_data.get("gen", "")
@@ -144,10 +113,11 @@ class Recording:
         self.recording_method = recording_data.get("method", "")
         self.license_url = recording_data.get("lic", "")
         self.quality_rating = recording_data.get("q", "")
-        self.recording_length = recording_length
-        self.recording_timestamp = recording_timestamp
+        self.recording_length = recording_data.get("length", "")
+        self.recording_date = recording_data.get("date", "")
+        self.recording_time = recording_data.get("time", "")
         self.date = recording_data.get("date", "")
-        self.upload_timestamp = uploaded_timestamp
+        self.upload_date = recording_data.get("uploaded", "")
         self.recording_url = recording_data.get("url", "")
         self.audio_file_url = recording_data.get("file", "")
         self.recordist_remarks = recording_data.get("rmk", "")
@@ -155,23 +125,12 @@ class Recording:
         self.automatic_recording = recording_data.get("auto", "")
         self.recording_device = recording_data.get("dvc", "")
         self.microphone_used = recording_data.get("mic", "")
-        self.sample_rate = (
-            int(recording_data.get("smp", 0)) if recording_data.get("smp", 0) else 0
-        )
-
+        self.sample_rate = recording_data.get("smp", 0)
         # Location information
         self.country = recording_data.get("cnt", "")
         self.locality_name = recording_data.get("loc", "")
-        self.latitude = (
-            float(recording_data.get("lat", ""))
-            if recording_data.get("lat", "")
-            else None
-        )
-        self.longitude = (
-            float(recording_data.get("lng", ""))
-            if recording_data.get("lng", "")
-            else None
-        )
+        self.latitude = recording_data.get("lat", "")
+        self.longitude = recording_data.get("lng", "")
         self.temperature = recording_data.get("temp", "")
 
     def to_dataframe_row(self) -> pd.DataFrame:
@@ -200,9 +159,10 @@ class Recording:
             "license_url": [self.license_url],
             "quality_rating": [self.quality_rating],
             "recording_length": [self.recording_length],
-            "recording_timestamp": [self.recording_timestamp],
+            "recording_date": [self.recording_date],
+            "recording_time": [self.recording_time],
             "date": [self.date],
-            "upload_timestamp": [self.upload_timestamp],
+            "upload_date": [self.upload_date],
             "recording_url": [self.recording_url],
             "audio_file_url": [self.audio_file_url],
             "recordist_remarks": [self.recordist_remarks],
