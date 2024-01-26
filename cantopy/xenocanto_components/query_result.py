@@ -21,12 +21,12 @@ class QueryResult:
 
     """
 
-    def __init__(self, query_metadata: Dict[str, str | int], result_pages: List[ResultPage]):
+    def __init__(self, query_metadata: Dict[str, int], result_pages: List[ResultPage]):
         """Init a QueryResult container.
 
         Parameters
         ----------
-        query_metadata : Dict[str, str | int]
+        query_metadata : Dict[str, int]
             Dictionary containing metadata information about the query results,
             the dict keys are: "available_num_recordings", "available_num_species", "available_num_pages".
         result_pages : List[ResultPage]

@@ -49,7 +49,7 @@ class FetchManager:
 
     def _fetch_result_page(
         self, query_str: str, page: int
-    ) -> Tuple[Dict[str, str | int], ResultPage]:
+    ) -> Tuple[Dict[str, int], ResultPage]:
         """Fetch a specific page from the XenoCanto API.
 
         Parameters

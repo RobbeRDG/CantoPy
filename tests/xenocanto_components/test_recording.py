@@ -1,66 +1,161 @@
 from cantopy.xenocanto_components import Recording
 
 
-def test_recording_init(example_recording_1_from_example_xenocanto_query_response_page_1: Recording):
+def test_recording_init(
+    example_recording_1_from_example_xenocanto_query_response_page_1: Recording,
+):
     """Test for the initialization of a Recording object.
 
     Parameters
     ----------
     example_recording_1_from_example_xenocanto_query_response_page_1 : Recording
-        A Recording object based on the first recording in the example page 1 XenoCanto 
+        A Recording object based on the first recording in the example page 1 XenoCanto
         API query response.
     """
 
     # See if all recording fields are captured
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.recording_id == 581412
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.generic_name == "Odontophorus"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.specific_name == "capueira"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.subspecies_name == "plumbeicollis"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.species_group == "birds"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.english_name == "Spot-winged Wood Quail"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.recordist_name == "Ciro Albano"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.country == "Brazil"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.locality_name == "RPPN Serra Bonita, Camacan-BA, Bahia"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.latitude == -15.3915
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.longitude == -39.5643
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.sound_type == "duet, song"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.sex == "female, male"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.life_stage == "adult"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.recording_method == "field recording"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.recording_url == "//xeno-canto.org/581412"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.audio_file_url == "https://xeno-canto.org/581412/download"
     assert (
-        example_recording_1_from_example_xenocanto_query_response_page_1.license_url == "//creativecommons.org/licenses/by-nc-sa/4.0/"
+        example_recording_1_from_example_xenocanto_query_response_page_1.recording_id
+        == 581412
     )
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.quality_rating == "A"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.recording_length.seconds == 194
     assert (
-        example_recording_1_from_example_xenocanto_query_response_page_1.recording_timestamp.strftime("%Y-%m-%d %X")
+        example_recording_1_from_example_xenocanto_query_response_page_1.generic_name
+        == "Odontophorus"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.specific_name
+        == "capueira"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.subspecies_name
+        == "plumbeicollis"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.species_group
+        == "birds"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.english_name
+        == "Spot-winged Wood Quail"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.recordist_name
+        == "Ciro Albano"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.country
+        == "Brazil"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.locality_name
+        == "RPPN Serra Bonita, Camacan-BA, Bahia"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.latitude
+        == -15.3915
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.longitude
+        == -39.5643
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.sound_type
+        == "duet, song"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.sex
+        == "female, male"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.life_stage
+        == "adult"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.recording_method
+        == "field recording"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.recording_url
+        == "//xeno-canto.org/581412"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.audio_file_url
+        == "https://xeno-canto.org/581412/download"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.license_url
+        == "//creativecommons.org/licenses/by-nc-sa/4.0/"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.quality_rating
+        == "A"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.recording_length.seconds
+        == 194
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.recording_timestamp.strftime(
+            "%Y-%m-%d %X"
+        )
         == "2020-08-02 08:00:00"
     )
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.upload_timestamp.strftime("%Y-%m-%d") == "2020-08-09"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.background_species == ["Sclerurus scansor"]
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.recordist_remarks == ""
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.animal_seen == "yes"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.playback_used == "yes"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.automatic_recording == "no"
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.recording_device == ""
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.microphone_used == ""
-    assert example_recording_1_from_example_xenocanto_query_response_page_1.sample_rate == 48000
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.upload_timestamp.strftime(
+            "%Y-%m-%d"
+        )
+        == "2020-08-09"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.background_species
+        == ["Sclerurus scansor"]
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.recordist_remarks
+        == ""
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.animal_seen
+        == "yes"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.playback_used
+        == "yes"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.automatic_recording
+        == "no"
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.recording_device
+        == ""
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.microphone_used
+        == ""
+    )
+    assert (
+        example_recording_1_from_example_xenocanto_query_response_page_1.sample_rate
+        == 48000
+    )
 
 
-def test_to_dataframe_row(example_recording_1_from_example_xenocanto_query_response_page_1: Recording):
+def test_to_dataframe_row(
+    example_recording_1_from_example_xenocanto_query_response_page_1: Recording,
+):
     """Test the conversion of a Recording object to a pandas DataFrame row.
 
     Parameters
     ----------
     example_recording_1_from_example_xenocanto_query_response_page_1 : Recording
-        A Recording object based on the first recording in the example page 1 XenoCanto 
+        A Recording object based on the first recording in the example page 1 XenoCanto
         API query response.
     """
 
     # Build the recording dataframe row
-    example_recording_df_row = example_recording_1_from_example_xenocanto_query_response_page_1.to_dataframe_row()
+    example_recording_df_row = (
+        example_recording_1_from_example_xenocanto_query_response_page_1.to_dataframe_row()
+    )
 
     # test if the dataframe row contains the correct information
     assert example_recording_df_row["recording_id"][0] == 581412
@@ -102,3 +197,19 @@ def test_to_dataframe_row(example_recording_1_from_example_xenocanto_query_respo
     assert example_recording_df_row["recording_device"][0] == ""
     assert example_recording_df_row["microphone_used"][0] == ""
     assert example_recording_df_row["sample_rate"][0] == 48000
+
+
+def test_zero_day_date_recording(example_zero_day_xenocanto_recording: Recording):
+    """Test if the day of a date of a recording is set to zero when given a recording
+    containing a date where the day part is set to 0.
+
+    Parameters
+    ----------
+    example_zero_day_xenocanto_recording : Recording
+        A Recording object based on a XenoCanto API query response where the recording date is set to 2003-03-00.
+    """
+
+    # Check if the recording date is set to the current date
+    assert example_zero_day_xenocanto_recording.recording_timestamp.year == 2003
+    assert example_zero_day_xenocanto_recording.recording_timestamp.month == 3
+    assert example_zero_day_xenocanto_recording.recording_timestamp.day == 1
