@@ -2,7 +2,7 @@
 # https://www.xeno-canto.org/explore/api
 
 
-class XenoCantoQuery:
+class Query:
     """Wrapper for a query passed to the Xeno Canto API.
 
     Attributes
