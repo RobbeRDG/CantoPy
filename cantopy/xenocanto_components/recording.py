@@ -104,6 +104,13 @@ class Recording:
         # Extract the full timestamp from the given string representation
         recording_date = recording_data.get("date", "")
         recording_time = recording_data.get("time", "")
+
+        # In some cases, a date is returned with the day value set to 0 (e.g. "2020-08-00")
+        # In this case, set the day value to 1
+        if recording_date.endswith("-00"):
+            recording_date = recording_date[:-2] + "01"
+
+        # Create a Timestamp object from the date and time
         recording_timestamp = (
             Timestamp(f"{recording_date}T{recording_time}")
             if not (recording_time == "?" or recording_time == "")  # If time is not set

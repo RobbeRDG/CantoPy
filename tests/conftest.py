@@ -26,6 +26,47 @@ TEST_DATA_BASE_FOLDER_PATH = (
 #### XENOCANTO COMPONENT FIXTURES
 ######################################################################
 
+@pytest.fixture(scope="session")
+def example_fake_xenocanto_recording() -> Recording:
+    """An example Recording object that is not actually from XenoCanto.
+
+    Returns
+    -------
+    Recording
+        The created fake Recording object.
+    """
+
+    # Open the example fake XenoCanto recording
+    with open(
+        "resources/test_resources/example_fake_xenocanto_recording.json",
+        "r",
+        encoding="utf-8",
+    ) as file:
+        return Recording(json.load(file))
+
+
+@pytest.fixture(scope="session")
+def example_zero_day_xenocanto_recording() -> Recording:
+    """An example XenoCanto Recording object that contains a zero-day date.
+
+    An example XenoCanto Recording object that contains a zero-day date. This is
+    used to test the functionality of the Recording class when the date is for example
+    "2003-03-00".
+
+    Returns
+    -------
+    Recording
+        The created zero-day Recording object.
+    """
+
+    # Open the example fake XenoCanto recording
+    with open(
+        "resources/test_resources/example_zero_day_date_xenocanto_recording.json",
+        "r",
+        encoding="utf-8",
+    ) as file:
+        return Recording(json.load(file))
+
 
 @pytest.fixture(scope="session")
 def example_xenocanto_query_response_page_1() -> (
@@ -69,25 +110,6 @@ def example_xenocanto_query_response_page_2() -> (
         encoding="utf-8",
     ) as file:
         return json.load(file)
-
-
-@pytest.fixture(scope="session")
-def example_fake_xenocanto_recording() -> Recording:
-    """An example Recording object that is not actually from XenoCanto.
-
-    Returns
-    -------
-    Recording
-        The created fake Recording object.
-    """
-
-    # Open the example fake XenoCanto recording
-    with open(
-        "resources/test_resources/example_fake_xenocanto_recording.json",
-        "r",
-        encoding="utf-8",
-    ) as file:
-        return Recording(json.load(file))
 
 
 @pytest.fixture(scope="session")
@@ -245,7 +267,7 @@ def example_recording_1_from_example_xenocanto_query_response_page_1(
 
 @pytest.fixture(scope="session")
 def example_single_page_queryresult(
-    example_query_metadata_page_1: Dict[str, str | int],
+    example_query_metadata_page_1: Dict[str, int],
     example_result_page_page_1: ResultPage,
 ) -> QueryResult:
     """Build a single-page QueryResult object based on the example page 1 XenoCanto API
@@ -269,7 +291,7 @@ def example_single_page_queryresult(
 
 @pytest.fixture(scope="session")
 def example_two_page_queryresult(
-    example_query_metadata_page_1: Dict[str, str | int],
+    example_query_metadata_page_1: Dict[str, int],
     example_result_page_page_1: ResultPage,
     example_result_page_page_2: ResultPage,
 ) -> QueryResult:
