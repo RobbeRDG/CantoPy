@@ -24,9 +24,15 @@ class FetchManager:
         Parameters
         ----------
         query : Query
-            the query to send to the Xeno Canto API.
+            The query to send to the Xeno Canto API.
         max_pages : int, optional
-            specify a maximum number of pages of recordings to fetch, by default 1.
+            Specify a maximum number of pages of recordings to fetch, by default 1.
+
+            This max_pages argument can to be passed the XenoCanto API to account for
+            queries with a lot of results, since we can't fetch them all at once,
+            XenoCanto divides the result up into a number of pages, which we need to
+            fetch seperately. If for example, we set that max_pages attribute to 5, this
+            method will only fetch the first 5 result pages.
 
         Returns
         -------
@@ -55,7 +61,7 @@ class FetchManager:
         Parameters
         ----------
         query_str : str
-            the query to send to the Xeno Canto API, printed in string format.
+            The query to send to the Xeno Canto API, printed in string format.
         page : int, optional
             The number id of the page we want to fetch.
 
