@@ -1,3 +1,3 @@
-from cantopy import fetch # type: ignore
-from cantopy import download  # type: ignore
-from cantopy import xenocanto_components # type: ignore
+from cantopy.fetch import FetchManager # type: ignore
+from cantopy.download import DownloadManager  # type: ignore
+from cantopy.xenocanto_components import Query # type: ignore
