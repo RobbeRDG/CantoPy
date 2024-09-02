@@ -3,7 +3,7 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-	"containerUser": "robbe",
+	"remoteUser": "root",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -15,7 +15,7 @@
 				"ms-python.pylint", // Linter
 				"njpwerner.autodocstring", // Docstring generation
 				"aaron-bond.better-comments", // Comment highlighting
-				"gruntfuggly.todo-tree" // Todo's
+				"mhutchie.git-graph", // Visualize Git graphs
 			],
 		}
 	},
