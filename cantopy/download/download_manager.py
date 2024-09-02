@@ -18,6 +18,8 @@ class DownloadManager:
         ----------
         data_base_path : str
             The base data folder where we want our download manager to store the downloaded files.
+            This can also be a folder that was already used by a previous run of this download 
+            manager, since it will skip duplicate downloads.
         max_workers : int, optional
             The maximum number of workers to use for downloading the recordings, by default 1
         """
@@ -26,6 +28,16 @@ class DownloadManager:
 
     def download_all_recordings_in_queryresult(self, query_result: QueryResult):
         """Download all the recordings contained in the provided QueryResult.
+
+        This function downloads all recordings contained in a QueryResult. Additionally,
+        the function also generates and updates a per-species metadata '.csv' file 
+        containing additional recording information for each downloaded recording of 
+        that species like recording_length, date, ... (See the 
+        `Recording.to_dataframe_row` method for the attributes that get logged in this 
+        metadata file).
+        
+        Note that this function also checks for duplicate recordings that have already
+        been downloaded and skips them.
 
         Parameters
         ----------
@@ -136,6 +148,14 @@ class DownloadManager:
     def _update_animal_recordings_metadata_files(
         self, downloaded_recordings_metadata: pd.DataFrame
     ):
+        """Update the metadata files of the animals whose recordings were downloaded.
+
+        Parameters
+        ----------
+        downloaded_recordings_metadata : pd.DataFrame
+            The metadata dataframe for the downloaded recordings.
+        """
+        
         # Get the list of animals
         animals = downloaded_recordings_metadata["english_name"].unique()  # type: ignore
 
