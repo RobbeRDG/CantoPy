@@ -6,19 +6,13 @@ from cantopy.xenocanto_components import Query, QueryResult, ResultPage
 
 class FetchManager:
     """Class for managing the fetching of data from the Xeno Canto API.
-
-    Attributes
-    ----------
-    base_url : str
-        The base url pointing to the XenoCanto API endpoint.
-
     """
 
-    def __init__(self) -> None:
-        """Init the CantoPy instance"""
-        self.base_url = "https://www.xeno-canto.org/api/2/recordings"
+    # The base url to the XenoCanto API
+    base_url = "https://www.xeno-canto.org/api/2/recordings"
 
-    def send_query(self, query: Query, max_pages: int = 1) -> QueryResult:
+    @classmethod
+    def send_query(cls, query: Query, max_pages: int = 1) -> QueryResult:
         """Send a query to the Xeno Canto API.
 
         Parameters
@@ -42,19 +36,20 @@ class FetchManager:
 
         # We need to first send an initial query to determine the number of available result pages
         query_str = query.to_string()
-        query_metadata, result_page_1 = self._fetch_result_page(query_str, page=1)
+        query_metadata, result_page_1 = cls._fetch_result_page(query_str, page=1)
 
         result_pages: List[ResultPage] = []
         result_pages.append(result_page_1)
 
         # Fetch the other requested result pages
         for i in range(1, min(max_pages, int(query_metadata["available_num_pages"]))):
-            result_pages.append(self._fetch_result_page(query_str, page=i + 1)[1])
+            result_pages.append(cls._fetch_result_page(query_str, page=i + 1)[1])
 
         return QueryResult(query_metadata, result_pages)
 
+    @classmethod
     def _fetch_result_page(
-        self, query_str: str, page: int
+        cls, query_str: str, page: int
     ) -> Tuple[Dict[str, int], ResultPage]:
         """Fetch a specific page from the XenoCanto API.
 
@@ -83,7 +78,7 @@ class FetchManager:
 
         # Send request and open json return as dict
         query_response = requests.get(
-            self.base_url,
+            cls.base_url,
             params=payload_str,
             timeout=5.0,
         ).json()
