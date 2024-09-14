@@ -46,6 +46,12 @@ class Query:
         These query attributes follow the XenoCanto API search fields. Additional
         context about these fields can be found at: https://xeno-canto.org/help/search.
 
+        Note: As stated in the XenoCanto advanced search documentation, some fiels
+        require in certain scenarios the addition of double qoutes, for example,
+        `cnt"United States"`. This also needs to be accounted for when creating a Query,
+        this can be done by enclosing the statements containing double qoutes in single
+        quotes, e.g. `country = 'cnt"United States"'`.
+
         Parameters
         ----------
         species_name : str
@@ -146,36 +152,36 @@ class Query:
 
         attributes = [
             f"{self.species_name}",
-            f'group:"{self.group}"',
-            f'gen:"{self.genus}"',
-            f'ssp:"{self.subspecies}"',
-            f'rec:"{self.recordist_id}"',
-            f'cnt:"{self.country}"',
-            f'loc:"{self.location}"',
-            f'rmk:"{self.remarks}"',
-            f'seen:"{self.animal_seen}"',
-            f'playback:"{self.playback_used}"',
-            f'lat:"{self.latitude}"',
-            f'lon:"{self.longitude}"',
-            f'box:"{self.coordinate_box}"',
-            f'also:"{self.also_attribute}"',
-            f'type:"{self.song_type}"',
-            f'othertype:"{self.other_type}"',
-            f'sex:"{self.sex}"',
-            f'stage:"{self.life_stage}"',
-            f'method:"{self.recording_method}"',
-            f'nr:"{self.catalog_number}"',
-            f'license:"{self.recording_license}"',
-            f'q:"{self.quality}"',
-            f'length:"{self.recording_length}"',
-            f'area:"{self.world_area}"',
-            f'since:"{self.uploaded_since}"',
-            f'year:"{self.recorded_year}"',
-            f'month:"{self.recorded_month}"',
-            f'smp:"{self.sample_rate}"',
+            f"group:{self.group}",
+            f"gen:{self.genus}",
+            f"ssp:{self.subspecies}",
+            f"rec:{self.recordist_id}",
+            f"cnt:{self.country}",
+            f"loc:{self.location}",
+            f"rmk:{self.remarks}",
+            f"seen:{self.animal_seen}",
+            f"playback:{self.playback_used}",
+            f"lat:{self.latitude}",
+            f"lon:{self.longitude}",
+            f"box:{self.coordinate_box}",
+            f"also:{self.also_attribute}",
+            f"type:{self.song_type}",
+            f"othertype:{self.other_type}",
+            f"sex:{self.sex}",
+            f"stage:{self.life_stage}",
+            f"method:{self.recording_method}",
+            f"nr:{self.catalog_number}",
+            f"license:{self.recording_license}",
+            f"q:{self.quality}",
+            f"length:{self.recording_length}",
+            f"area:{self.world_area}",
+            f"since:{self.uploaded_since}",
+            f"year:{self.recorded_year}",
+            f"month:{self.recorded_month}",
+            f"smp:{self.sample_rate}",
         ]
 
         # Remove the None values
         attributes = [attribute for attribute in attributes if "None" not in attribute]
 
-        return "+".join(filter(None, attributes))
+        return " ".join(filter(None, attributes))
