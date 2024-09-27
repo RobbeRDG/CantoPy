@@ -1,5 +1,3 @@
-from typing import Dict
-from typing import List
 from cantopy.xenocanto_components.result_page import ResultPage
 from cantopy.xenocanto_components.recording import Recording
 
@@ -16,20 +14,20 @@ class QueryResult:
         independent of the amount of recordings in this QueryResult.
     available_num_pages : int
         The total number of pages available for this query.
-    result_pages: List[ResultPage]
+    result_pages: list[ResultPage]
         List of all the returned pages for the query
 
     """
 
-    def __init__(self, query_metadata: Dict[str, int], result_pages: List[ResultPage]):
+    def __init__(self, query_metadata: dict[str, int], result_pages: list[ResultPage]):
         """Init a QueryResult container.
 
         Parameters
         ----------
-        query_metadata : Dict[str, int]
+        query_metadata
             Dictionary containing metadata information about the query results,
             the dict keys are: "available_num_recordings", "available_num_species", "available_num_pages".
-        result_pages : List[ResultPage]
+        result_pages
             List of all the returned pages for the query.
 
         """
@@ -42,7 +40,7 @@ class QueryResult:
         # Set the result pages
         self.result_pages = result_pages
 
-    def get_all_recordings(self) -> List[Recording]:
+    def get_all_recordings(self) -> list[Recording]:
         """Return all the recordings contained in this QueryResult, across all ResultPages.
 
         Returns
@@ -53,7 +51,7 @@ class QueryResult:
         """
 
         # Initialize the list of recordings
-        all_recordings: List[Recording] = []
+        all_recordings: list[Recording] = []
 
         # Loop over all the result pages
         for result_page in self.result_pages:

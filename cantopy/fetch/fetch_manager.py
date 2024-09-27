@@ -1,4 +1,3 @@
-from typing import Dict, List, Tuple
 import requests
 import urllib.parse
 from cantopy.xenocanto_components import Query, QueryResult, ResultPage
@@ -17,9 +16,9 @@ class FetchManager:
 
         Parameters
         ----------
-        query : Query
+        query
             The query to send to the Xeno Canto API.
-        max_pages : int, optional
+        max_pages : optional
             Specify a maximum number of pages of recordings to fetch, by default 1.
 
             This max_pages argument can to be passed the XenoCanto API to account for
@@ -38,7 +37,7 @@ class FetchManager:
         query_str = query.to_string()
         query_metadata, result_page_1 = cls._fetch_result_page(query_str, page=1)
 
-        result_pages: List[ResultPage] = []
+        result_pages: list[ResultPage] = []
         result_pages.append(result_page_1)
 
         # Fetch the other requested result pages
@@ -50,19 +49,19 @@ class FetchManager:
     @classmethod
     def _fetch_result_page(
         cls, query_str: str, page: int
-    ) -> Tuple[Dict[str, int], ResultPage]:
+    ) -> tuple[dict[str, int], ResultPage]:
         """Fetch a specific page from the XenoCanto API.
 
         Parameters
         ----------
-        query_str : str
+        query_str
             The query to send to the Xeno Canto API, printed in string format.
-        page : int, optional
+        page : optional
             The number id of the page we want to fetch.
 
         Returns
         -------
-        Tuple[Dict[str, int], ResultPage]
+        tuple[dict[str, int], ResultPage]
             A tuple containing both a dictionary with query metadata (keys: "available_num_recordings",
             "available_num_species", "available_num_pages") and a ResultPage wrapper containing
             the requested page.
