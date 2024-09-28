@@ -107,9 +107,9 @@ class Query:
 
         Note: As stated in the XenoCanto advanced search documentation, some fiels
         require in certain scenarios the addition of double qoutes, for example,
-        `cnt"United States"`. This also needs to be accounted for when creating a Query,
+        `cnt:"United States"`. This also needs to be accounted for when creating a Query,
         this can be done by enclosing the statements containing double qoutes in single
-        quotes, e.g. `country = 'cnt"United States"'`.
+        quotes, e.g. `country = 'cnt:"United States"'`.
 
         Parameters
         ----------

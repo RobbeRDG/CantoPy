@@ -1,6 +1,7 @@
 from cantopy.xenocanto_components.result_page import ResultPage
 from cantopy.xenocanto_components.recording import Recording
 
+
 class QueryResult:
     """Wrapper container for storing all the ResultPages returned by the XenoCanto API in response to a given Query in one place.
 
@@ -20,7 +21,7 @@ class QueryResult:
     """
 
     def __init__(self, query_metadata: dict[str, int], result_pages: list[ResultPage]):
-        """Init a QueryResult container.
+        """Create a QueryResult container.
 
         Parameters
         ----------
