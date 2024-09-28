@@ -20,6 +20,7 @@ extensions = ["sphinx.ext.napoleon", "sphinx.ext.viewcode"]
 
 templates_path = ["_templates"]
 exclude_patterns = []
+autoclass_content = "both"  # Include both the class's and the init's docstring
 
 
 # -- Options for HTML output -------------------------------------------------
