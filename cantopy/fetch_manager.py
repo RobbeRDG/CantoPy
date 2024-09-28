@@ -5,6 +5,15 @@ from cantopy.xenocanto_components import Query, QueryResult, ResultPage
 
 class FetchManager:
     """Class for managing the fetching of data from the Xeno Canto API.
+
+    This class is responsible for sending queries to the Xeno Canto API and
+    returning the results in a structured format. It is the main interface
+    between the user and the Xeno Canto API.
+
+    Attributes
+    ----------
+    base_url : str
+        The base url to the XenoCanto API.
     """
 
     # The base url to the XenoCanto API
