@@ -1,5 +1,3 @@
-from typing import Dict
-
 import pandas as pd
 
 
@@ -84,12 +82,12 @@ class Recording:
 
     """
 
-    def __init__(self, recording_data: Dict[str, str]):
+    def __init__(self, recording_data: dict[str, str]):
         """Create a Recording object with a given recording dict returned from the XenoCanto API
 
         Parameters
         ----------
-        recording_data : Dict[str, str]
+        recording_data
             The dict of the recording returned by the XenoCanto API
         """
 

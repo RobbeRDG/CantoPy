@@ -1,4 +1,3 @@
-from typing import List, Dict
 from cantopy.xenocanto_components.recording import Recording
 
 
@@ -15,13 +14,13 @@ class ResultPage:
     """
 
     def __init__(
-        self, single_page_query_response: Dict[str, str | int | List[Dict[str, str]]]
+        self, single_page_query_response: dict[str, str | int | list[dict[str, str]]]
     ):
         """Create a ResultPage object from the XenoCanto json response
 
         Parameters
         ----------
-        single_page_query_response : Dict[str, Any]
+        single_page_query_response
             The query response from the XenoCanto API.
 
         Raises
@@ -42,7 +41,7 @@ class ResultPage:
             )
 
         # Set the recordings
-        self.recordings: List[Recording] = []
+        self.recordings: list[Recording] = []
 
         if not isinstance(single_page_query_response["recordings"], list):
             raise TypeError(

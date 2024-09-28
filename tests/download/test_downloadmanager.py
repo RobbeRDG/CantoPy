@@ -227,11 +227,9 @@ def test_downloadmanager_generate_downloaeded_recording_metadata(
     example_queryresult: QueryResult = request.getfixturevalue(
         example_queryresult_fixture_name
     )
-    downloaded_recording_metadata = (
-        fake_data_folder_download_manager._generate_downloaded_recordings_metadata( # type: ignore
-            example_queryresult.get_all_recordings(),
-            download_pass_or_fail,
-        )
+    downloaded_recording_metadata = fake_data_folder_download_manager._generate_downloaded_recordings_metadata(  # type: ignore
+        example_queryresult.get_all_recordings(),
+        download_pass_or_fail,
     )
 
     # We only want to generate the metadata for the recordings that have indeed
@@ -287,11 +285,15 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
     little_nightjar_partial_test_recording_metadata: pd.DataFrame,
     little_nightjar_full_test_recording_metadata: pd.DataFrame,
 ):
+    # TODO: add test for when the metadata file does not exist yet
+    # TODO: add docstring
+    # TODO: Can this be done in a more elegant way?
+
     to_add_test_recording_metadata: pd.DataFrame = request.getfixturevalue(
         metadata_to_add_fixture_name
     )
 
-    partially_filled_data_folder_download_manager._update_animal_recordings_metadata_files( # type: ignore
+    partially_filled_data_folder_download_manager._update_animal_recordings_metadata_files(  # type: ignore
         to_add_test_recording_metadata
     )
 
@@ -320,13 +322,6 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
     elif (
         metadata_to_add_fixture_name == "little_nightjar_to_add_test_recording_metadata"
     ):
-        test = pd.read_csv(  # type: ignore
-            join(
-                partially_filled_data_folder_download_manager.data_base_path,
-                "spot_winged_wood_quail",
-                "spot_winged_wood_quail_recording_metadata.csv",
-            )
-        )
         assert spot_winged_wood_quail_partial_test_recording_metadata.equals(  # type: ignore
             pd.read_csv(  # type: ignore
                 join(
@@ -378,7 +373,7 @@ def test_downloadmanager_generate_animal_folder_name(
     """
     # Spaces should be replaced by "_"
     assert (
-        fake_data_folder_download_manager._generate_animal_folder_name( # type: ignore
+        fake_data_folder_download_manager._generate_animal_folder_name(  # type: ignore
             "test with just spaces"
         )
         == "test_with_just_spaces"
@@ -386,7 +381,7 @@ def test_downloadmanager_generate_animal_folder_name(
 
     # Everything should be lower case
     assert (
-        fake_data_folder_download_manager._generate_animal_folder_name( # type: ignore
+        fake_data_folder_download_manager._generate_animal_folder_name(  # type: ignore
             "tEst CAPITAL Bird name"
         )
         == "test_capital_bird_name"
@@ -394,7 +389,7 @@ def test_downloadmanager_generate_animal_folder_name(
 
     # Special chars
     assert (
-        fake_data_folder_download_manager._generate_animal_folder_name( # type: ignore
+        fake_data_folder_download_manager._generate_animal_folder_name(  # type: ignore
             "black-winged bird"
         )
         == "black_winged_bird"

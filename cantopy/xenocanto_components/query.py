@@ -5,64 +5,68 @@
 class Query:
     """Wrapper for a query passed to the Xeno Canto API.
 
+    This is a simple wrapper that adheres to the query fields of the original XenoCanto
+    API. Additional context about these fields can be found at: https://xeno-canto.org/help/search.
+
     Attributes
     ----------
     species_name : str
         The name of the species, can be either the English name, the scientific name, or the scientific name of the family.
     group : str
-        The group of the recording (e.g., 'birds', 'grasshoppers', 'bats').
+        The group of the recording. The `grp` field in the XenoCanto API.
     genus : str
-        The genus name of the species.
+        The genus name of the species. The `gen` field in the XenoCanto API.
     subspecies : str
-        The subspecies.
+        The subspecies. The `ssp` field in the XenoCanto API.
     recordist_id : str
-        The id of the person who uploaded the recording.
+        The id of the person who uploaded the recording.  The `rec` field in the XenoCanto API.
     country : str
-        The country of the recording.
+        The country of the recording. The `cnt` field in the XenoCanto API.
     location : str
-        The location of the recording.
+        The location of the recording. The `loc` field in the XenoCanto API.
     remarks : str
-        Additional remarks for the recording.
+        Additional remarks for the recording. The `rmk` field in the XenoCanto API.
     animal_seen : str
-        If the animal was seen.
+        If the animal was seen. The `seen` field in the XenoCanto API.
     playback_used : str
-        The playback used attribute to set.
+        The playback used attribute to set. The `playback` field in the XenoCanto API.
     latitude : str
-        The latitude of the recording.
+        The latitude of the recording. The `lat` field in the XenoCanto API.
     longitude : str
-        The longitude of the recording.
+        The longitude of the recording. The `lon` field in the XenoCanto API.
     coordinate_box : str
-        The coordinate box which should contain the recording location.
+        The coordinate box which should contain the recording location. The `box` field in the XenoCanto API.
     also_attribute : str
-        The 'also' attribute is used to search for background species in a recording.
+        The 'also' attribute is used to search for background species in a recording.  The `also` field in the XenoCanto API.
     song_type : str
-        The type of song in the recording.
+        The type of song in the recording. The `type` field in the XenoCanto API.
     other_type : str
-        The 'other type' attribute is used when the type field does not contain the desired sound type.
+        The 'other type' attribute is used when the type field does not contain the desired sound type. The `othertype` field in the XenoCanto API.
     sex : str
-        The sex of the species.
+        The sex of the species. The `sex` field in the XenoCanto API.
     life_stage : str
-        The life stage attribute to set, valid values are: "adult", "juvenile", "nestling", "nymph", and "subadult".
+        The life stage attribute to set, valid values are: "adult", "juvenile", "nestling", "nymph", and "subadult". The `stage` field in the XenoCanto API.
     recording_method : str
-        The recording method of the recording.
+        The recording method of the recording. The `method` field in the XenoCanto API.
     catalog_number : str
-        The catalog number of recording to search for a specific recording.
+        The catalog number of recording to search for a specific recording.  The `nr` field in the XenoCanto API.
     recording_license : str
-        The recording license.
+        The recording license. The `lic` field in the XenoCanto API.
     quality : str
-        The quality of the recording.
+        The quality of the recording. The `q` field in the XenoCanto API.
     recording_length : str
-        The length of the recording.
+        The length of the recording. The `len` field in the XenoCanto API.
     world_area : str
-        The general world area of the recording.
+        The general world area of the recording. The `area` field in the XenoCanto API.
     uploaded_since : str
-        Search for recordings UPLOADED after a certain date.
+        Search for recordings UPLOADED after a certain date. The `since` field in the XenoCanto API.
     recorded_year : str
-        Search for recordings RECORDED in a certain year.
+        Search for recordings RECORDED in a certain year. The `year` field in the XenoCanto API.
     recorded_month : str
-        Search for recordings RECORDED in a certain month.
+        Search for recordings RECORDED in a certain month. The `month` field in the XenoCanto API.
     sample_rate : str
-        The sample rate of the recording.
+        The sample rate of the recording. The `smp` field in the XenoCanto API.
+
     """
 
     def __init__(
@@ -98,82 +102,73 @@ class Query:
     ):
         """Initialize the query object for passing to the Xeno Canto API.
 
+        These query attributes follow the XenoCanto API search fields. Additional
+        context about these fields can be found at: https://xeno-canto.org/help/search.
+
+        Note: As stated in the XenoCanto advanced search documentation, some fiels
+        require in certain scenarios the addition of double qoutes, for example,
+        `cnt"United States"`. This also needs to be accounted for when creating a Query,
+        this can be done by enclosing the statements containing double qoutes in single
+        quotes, e.g. `country = 'cnt"United States"'`.
+
         Parameters
         ----------
-        species_name : str
-            The name to set, can be either the English name, the scientific name, or the scientific name of the family.
-        group : str, optional
-            The group to set, valid values are: 'birds', 'grasshoppers', or 'bats'.
-            This can also be set using their respective ids: '1', '2', and '3'. Recordings may include multiple groups,
-            use 'soundscape' or '0' to include all groups.
-        genus : str, optional
-            The genus name to set, field uses a 'starts with' rather than 'contains' query and accepts a 'matches' operator.
-        subspecies : str, optional
-            The subspecies to set, field uses a 'starts with' rather than 'contains' query and accepts a 'matches' operator.
-        recordist_id : str, optional
-            The recordist to set, field accepts a 'matches' operator.
-        country : str, optional
-            The country to set, field uses a 'starts with' query and accepts a 'matches' operator.
-        location : str, optional
-            The location to set, field accepts a 'matches' operator.
-        remarks : str, optional
-            The remarks to set, field accepts a 'matches' operator.
-        animal_seen : str, optional
-            The animal seen attribute to set.
-        playback_used : str, optional
-            The playback used attribute to set.
-        latitude : str, optional
-            The latitude to set, used in conjunction with the lon field to search within one degree of a location.
-            This field also accepts '<' and '>' operators.
-        longitude : str, optional
-            The longitude to set, used in conjunction with the lat field to search within one degree of a location.
-            This field also accepts '<' and '>' operators.
-        coordinate_box : str, optional
-            The coordinate box to set, this box is formatted as follows: LAT_MIN,LON_MIN,LAT_MAX,LON_MAX.
-            This field also accepts '<' and '>' operators.
-        also_attribute : str, optional
-            The also attribute to set, the also attribute is used to search for background species in a recording.
-        song_type : str, optional
-            The type attribute to set, valid values for this tag are: "aberrant", "alarm call", "begging call", "call",
-            "calling song", "courtship song", "dawn song", "distress call", "disturbance song", "drumming", "duet",
-            "echolocation", "female song", "flight call", "flight song", "imitation", "nocturnal flight call",
-            "rivalry song", "searching song", "social call", "song", "subsong". This field always uses a 'matches' operator.
-        other_type : str, optional
-            The other type attribute to set, this field is used when the type field does not contain the desired sound type
-            e.g., "wing flapping".
-        sex : str, optional
-            The sex attribute to set, valid values are: "male" and "female". This field always uses a 'matches' operator.
-        life_stage : str, optional
-            The life stage attribute to set, valid values are: "adult", "juvenile", "nestling", "nymph", and "subadult".
-            This field always uses a 'matches' operator.
-        recording_method : str, optional
-            The recording method attribute to set, valid values are: "emerging from roost", "field recording",
-            "fluorescent light tag", "hand-release", "in enclosure", "in net", "in the hand", "roosting", "roped",
-            "studio recording". This field always uses a 'matches' operator.
-        catalog_number : str, optional
-            The catalog number of recordings attribute to set, this field is used to search for a specific recording.
-            It can also be used to search for a range of recordings e.g. 1-10.
-        recording_license : str, optional
-            The recording license attribute to set, valid values are: "BY" (Attribution), "NC" (NonCommercial), "SA"
-            (ShareAlike), "ND" (NoDerivatives), "CC0" (Public Domain/copyright-free) and "PD" (no restrictions (=BY-NC-SA)).
-            Conditions can be combined e.g. "BY-NC-SA". This field always uses a 'matches' operator.
-        quality : str, optional
-            The quality attribute to set, valid values range from "A" (best) to "E" (worst). This field accepts "<" and ">" operators.
-        recording_length : str, optional
-            The recording length attribute to set, this field accepts "<", ">" and "=" operators.
-        world_area : str, optional
-            The area attribute to set, valid values are: "africa", "america", "asia", "australia", "europe".
-        uploaded_since : str, optional
-            The since attribute to set, this field is used to search for recordings UPLOADED after a certain date,
-            date format is YYYY-MM-DD.
-        recorded_year : str, optional
-            The year attribute to set, this field is used to search for recordings RECORDED in a certain year,
-            date format is YYYY, this field accepts "<" and ">" operators.
-        recorded_month : str, optional
-            The month attribute to set, this field is used to search for recordings RECORDED in a certain month,
-            date format is MM, this field accepts "<" and ">" operators.
-        sample_rate : str, optional
-            The sample rate attribute to set, this field accepts "<" and ">" operators.
+        species_name
+            The name of the species, can be either the English name, the scientific name, or the scientific name of the family.
+        group
+            The group of the recording. The `grp` field in the XenoCanto API.
+        genus
+            The genus name of the species. The `gen` field in the XenoCanto API.
+        subspecies
+            The subspecies. The `ssp` field in the XenoCanto API.
+        recordist_id
+            The id of the person who uploaded the recording.  The `rec` field in the XenoCanto API.
+        country
+            The country of the recording. The `cnt` field in the XenoCanto API.
+        location
+            The location of the recording. The `loc` field in the XenoCanto API.
+        remarks
+            Additional remarks for the recording. The `rmk` field in the XenoCanto API.
+        animal_seen
+            If the animal was seen. The `seen` field in the XenoCanto API.
+        playback_used
+            The playback used attribute to set. The `playback` field in the XenoCanto API.
+        latitude
+            The latitude of the recording. The `lat` field in the XenoCanto API.
+        longitude
+            The longitude of the recording. The `lon` field in the XenoCanto API.
+        coordinate_box
+            The coordinate box which should contain the recording location. The `box` field in the XenoCanto API.
+        also_attribute
+            The 'also' attribute is used to search for background species in a recording.  The `also` field in the XenoCanto API.
+        song_type
+            The type of song in the recording. The `type` field in the XenoCanto API.
+        other_type
+            The 'other type' attribute is used when the type field does not contain the desired sound type. The `othertype` field in the XenoCanto API.
+        sex
+            The sex of the species. The `sex` field in the XenoCanto API.
+        life_stage
+            The life stage attribute to set, valid values are: "adult", "juvenile", "nestling", "nymph", and "subadult". The `stage` field in the XenoCanto API.
+        recording_method
+            The recording method of the recording. The `method` field in the XenoCanto API.
+        catalog_number
+            The catalog number of recording to search for a specific recording.  The `nr` field in the XenoCanto API.
+        recording_license
+            The recording license. The `lic` field in the XenoCanto API.
+        quality
+            The quality of the recording. The `q` field in the XenoCanto API.
+        recording_length
+            The length of the recording. The `len` field in the XenoCanto API.
+        world_area
+            The general world area of the recording. The `area` field in the XenoCanto API.
+        uploaded_since
+            Search for recordings UPLOADED after a certain date. The `since` field in the XenoCanto API.
+        recorded_year
+            Search for recordings RECORDED in a certain year. The `year` field in the XenoCanto API.
+        recorded_month
+            Search for recordings RECORDED in a certain month. The `month` field in the XenoCanto API.
+        sample_rate
+            The sample rate of the recording. The `smp` field in the XenoCanto API.
         """
 
         self.species_name = species_name
@@ -216,36 +211,36 @@ class Query:
 
         attributes = [
             f"{self.species_name}",
-            f'group:"{self.group}"',
-            f'gen:"{self.genus}"',
-            f'ssp:"{self.subspecies}"',
-            f'rec:"{self.recordist_id}"',
-            f'cnt:"{self.country}"',
-            f'loc:"{self.location}"',
-            f'rmk:"{self.remarks}"',
-            f'seen:"{self.animal_seen}"',
-            f'playback:"{self.playback_used}"',
-            f'lat:"{self.latitude}"',
-            f'lon:"{self.longitude}"',
-            f'box:"{self.coordinate_box}"',
-            f'also:"{self.also_attribute}"',
-            f'type:"{self.song_type}"',
-            f'othertype:"{self.other_type}"',
-            f'sex:"{self.sex}"',
-            f'stage:"{self.life_stage}"',
-            f'method:"{self.recording_method}"',
-            f'nr:"{self.catalog_number}"',
-            f'license:"{self.recording_license}"',
-            f'q:"{self.quality}"',
-            f'length:"{self.recording_length}"',
-            f'area:"{self.world_area}"',
-            f'since:"{self.uploaded_since}"',
-            f'year:"{self.recorded_year}"',
-            f'month:"{self.recorded_month}"',
-            f'smp:"{self.sample_rate}"',
+            f"group:{self.group}",
+            f"gen:{self.genus}",
+            f"ssp:{self.subspecies}",
+            f"rec:{self.recordist_id}",
+            f"cnt:{self.country}",
+            f"loc:{self.location}",
+            f"rmk:{self.remarks}",
+            f"seen:{self.animal_seen}",
+            f"playback:{self.playback_used}",
+            f"lat:{self.latitude}",
+            f"lon:{self.longitude}",
+            f"box:{self.coordinate_box}",
+            f"also:{self.also_attribute}",
+            f"type:{self.song_type}",
+            f"othertype:{self.other_type}",
+            f"sex:{self.sex}",
+            f"stage:{self.life_stage}",
+            f"method:{self.recording_method}",
+            f"nr:{self.catalog_number}",
+            f"license:{self.recording_license}",
+            f"q:{self.quality}",
+            f"length:{self.recording_length}",
+            f"area:{self.world_area}",
+            f"since:{self.uploaded_since}",
+            f"year:{self.recorded_year}",
+            f"month:{self.recorded_month}",
+            f"smp:{self.sample_rate}",
         ]
 
         # Remove the None values
         attributes = [attribute for attribute in attributes if "None" not in attribute]
 
-        return "+".join(filter(None, attributes))
+        return " ".join(filter(None, attributes))

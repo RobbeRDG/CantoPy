@@ -1,3 +1,6 @@
-from cantopy import fetch # type: ignore
-from cantopy import download  # type: ignore
-from cantopy import xenocanto_components # type: ignore
+from cantopy.fetch_manager import FetchManager
+from cantopy.download_manager import DownloadManager
+from cantopy.xenocanto_components import Query
+
+
+__all__ = ["FetchManager", "DownloadManager", "Query"]

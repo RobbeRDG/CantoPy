@@ -1,6 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
-from typing import Dict, List
 from cantopy.xenocanto_components import QueryResult, Recording
 from os.path import exists, join
 import pandas as pd
@@ -16,9 +15,11 @@ class DownloadManager:
 
         Parameters
         ----------
-        data_base_path : str
+        data_base_path
             The base data folder where we want our download manager to store the downloaded files.
-        max_workers : int, optional
+            This can also be a folder that was already used by a previous run of this download 
+            manager, since it will skip duplicate downloads.
+        max_workers : optional
             The maximum number of workers to use for downloading the recordings, by default 1
         """
         self.data_base_path = data_base_path
@@ -27,9 +28,19 @@ class DownloadManager:
     def download_all_recordings_in_queryresult(self, query_result: QueryResult):
         """Download all the recordings contained in the provided QueryResult.
 
+        This function downloads all recordings contained in a QueryResult. Additionally,
+        the function also generates and updates a per-species metadata '.csv' file 
+        containing additional recording information for each downloaded recording of 
+        that species like recording_length, date, ... (See the 
+        `Recording.to_dataframe_row` method for the attributes that get logged in this 
+        metadata file).
+        
+        Note that this function also checks for duplicate recordings that have already
+        been downloaded and skips them.
+
         Parameters
         ----------
-        query_result : QueryResult
+        query_result
             The QueryResult instance containing the recordings we want to download.
         """
 
@@ -62,20 +73,20 @@ class DownloadManager:
         # Udate the metadata file of each one of the downloaded animals
         self._update_animal_recordings_metadata_files(downloaded_recordings_metadata)
 
-    def _download_all_recordings(self, recordings: List[Recording]) -> Dict[str, str]:
+    def _download_all_recordings(self, recordings: list[Recording]) -> dict[str, str]:
         """Download all recordings in the provided recordings list.
 
         Parameters
         ----------
-        recordings : List[Recording]
+        recordings
             The list of recordings we want to download.
 
         Returns
         -------
-        Dict[str, str]
+        dict[str, str]
             A dictionary containing the download status of each recording ("pass" or "fail").
         """
-        download_pass_or_fail: Dict[str, str] = {}
+        download_pass_or_fail: dict[str, str] = {}
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:  # type: ignore
             futures = [
@@ -94,7 +105,7 @@ class DownloadManager:
 
         Parameters
         ----------
-        recording : Recording
+        recording
             The recording we want to download.
 
         Returns
@@ -136,6 +147,14 @@ class DownloadManager:
     def _update_animal_recordings_metadata_files(
         self, downloaded_recordings_metadata: pd.DataFrame
     ):
+        """Update the metadata files of the animals whose recordings were downloaded.
+
+        Parameters
+        ----------
+        downloaded_recordings_metadata
+            The metadata dataframe for the downloaded recordings.
+        """
+        
         # Get the list of animals
         animals = downloaded_recordings_metadata["english_name"].unique()  # type: ignore
 
@@ -172,22 +191,22 @@ class DownloadManager:
             animal_metadata.to_csv(animal_metadata_file_path, index=False)
 
     def _detect_already_downloaded_recordings(
-        self, recordings: List[Recording]
-    ) -> Dict[str, str]:
+        self, recordings: list[Recording]
+    ) -> dict[str, str]:
         """Detect the recordings that are already downloaded in the data folder.
 
         Parameters
         ----------
-        recordings : List[Recording]
+        recordings
             The list of recordings we want to check for already downloaded recordings.
 
         Returns
         -------
-        Dict[str, str]
+        dict[str, str]
             A dictionary containing the input recording ids as keys and their downloaded status as values
             ("already_downloaded" or "new").
         """
-        detected_already_downloaded_recordings: Dict[str, str] = {}
+        detected_already_downloaded_recordings: dict[str, str] = {}
 
         for recording in recordings:
             species_folder_name = self._generate_animal_folder_name(
@@ -212,15 +231,15 @@ class DownloadManager:
         return detected_already_downloaded_recordings
 
     def _generate_downloaded_recordings_metadata(
-        self, recordings: List[Recording], download_pass_or_fail: Dict[str, str]
+        self, recordings: list[Recording], download_pass_or_fail: dict[str, str]
     ) -> pd.DataFrame:
         """Generate the metadata dataframe for the downloaded recordings.
 
         Parameters
         ----------
-        recordings : List[Recording]
+        recordings
             The list of recordings we want to generate the metadata dataframe for.
-        download_pass_or_fail : Dict[str, str]
+        download_pass_or_fail
             A dictionary containing the downloaded status of each recording ("pass" or "fail").
 
         Returns
@@ -243,7 +262,7 @@ class DownloadManager:
 
         Parameters
         ----------
-        animal_english_name : str
+        animal_english_name
             The english name of the animal.
 
         Returns

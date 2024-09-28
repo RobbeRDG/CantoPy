@@ -14,9 +14,9 @@ def query_for_tostring_test() -> Query:
     return Query(
         species_name="common blackbird",
         country="Netherlands",
-        song_type="alarm call",
-        life_stage="=adult",
-        quality=">C",
+        song_type='"alarm call"',
+        life_stage='"=adult"',
+        quality='">C"',
     )
 
 
@@ -30,5 +30,5 @@ def test_to_string(query_for_tostring_test: Query):
     """
     assert (
         query_for_tostring_test.to_string()
-        == 'common blackbird+cnt:"Netherlands"+type:"alarm call"+stage:"=adult"+q:">C"'
+        == 'common blackbird cnt:Netherlands type:"alarm call" stage:"=adult" q:">C"'
     )
