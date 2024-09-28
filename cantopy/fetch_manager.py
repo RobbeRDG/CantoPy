@@ -5,10 +5,14 @@ from cantopy.xenocanto_components import Query, QueryResult, ResultPage
 
 class FetchManager:
     """Class for managing the fetching of data from the Xeno Canto API.
+
+    This class is responsible for sending queries to the Xeno Canto API and
+    returning the results in a structured format. It is the main interface
+    between the user and the Xeno Canto API.
     """
 
     # The base url to the XenoCanto API
-    base_url = "https://www.xeno-canto.org/api/2/recordings"
+    _base_url = "https://www.xeno-canto.org/api/2/recordings"
 
     @classmethod
     def send_query(cls, query: Query, max_pages: int = 1) -> QueryResult:
@@ -19,8 +23,7 @@ class FetchManager:
         query
             The query to send to the Xeno Canto API.
         max_pages : optional
-            Specify a maximum number of pages of recordings to fetch, by default 1.
-
+            Specify a maximum number of pages of recordings to fetch.
             This max_pages argument can to be passed the XenoCanto API to account for
             queries with a lot of results, since we can't fetch them all at once,
             XenoCanto divides the result up into a number of pages, which we need to
