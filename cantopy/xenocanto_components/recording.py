@@ -75,10 +75,11 @@ class Recording:
     -----
     Currently, the recording class does not capture the following information also returned by the
     XenoCanto API:
-    - file-name : Original file name of the audio file.
-    - sono : An object with the URLs to the four versions of sonograms.
-    - osci : An object with the URLs to the three versions of oscillograms.
-    - regnr : Registration number of the specimen (when collected).
+
+    * `file-name`: Original file name of the audio file.
+    * `sono`: An object with the URLs to the four versions of sonograms.
+    * `osci`: An object with the URLs to the three versions of oscillograms.
+    * `regnr`: Registration number of the specimen (when collected).
 
     """
 

@@ -17,7 +17,7 @@ The following example demonstrates how to use these components to retrieve high-
     query = Query(species_name="common blackbird", quality="A")
 
     # Find matching query results on the Xeno-Canto database
-    query_result = FetchManager.send_query(query, max_pages=3)
+    query_result = FetchManager.send_query(query)
 
     # Initialize a DownloadManager
     download_manager = DownloadManager("<download_base_folder>")
