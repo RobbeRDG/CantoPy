@@ -21,7 +21,7 @@ class DownloadManager:
     """
 
     def __init__(self, data_base_path: str, max_workers: int = 1):
-        """Init a DownloadManager instance
+        """Initialize a DownloadManager instance
 
         Parameters
         ----------
