@@ -1,4 +1,4 @@
-from cantopy.download import DownloadManager
+from cantopy import DownloadManager
 from cantopy.xenocanto_components import QueryResult, Recording
 import os
 from os.path import join

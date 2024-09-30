@@ -10,7 +10,7 @@ import sys
 print(sys.path)
 
 from cantopy.xenocanto_components import QueryResult, Recording, ResultPage
-from cantopy.download import DownloadManager
+from cantopy import DownloadManager
 
 
 
