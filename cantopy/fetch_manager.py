@@ -80,7 +80,7 @@ class FetchManager:
 
         # Send request and open json return as dict
         query_response = requests.get(
-            cls.base_url,
+            cls._base_url,
             params=payload_str,
             timeout=5.0,
         ).json()
