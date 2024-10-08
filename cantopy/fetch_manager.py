@@ -82,7 +82,7 @@ class FetchManager:
         query_response = requests.get(
             cls._base_url,
             params=payload_str,
-            timeout=5.0,
+            timeout=30.0,
         ).json()
 
         # Extract the metadata information of this query
