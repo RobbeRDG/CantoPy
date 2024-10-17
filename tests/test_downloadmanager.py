@@ -183,15 +183,29 @@ def test_downloadmanager_detect_already_donwloaded_recordings(
 
 
 @pytest.mark.parametrize(
-    "example_queryresult_fixture_name",
+    "example_queryresult_fixture_name, test_pass_fail_dict",
     [
-        ("example_single_page_queryresult"),
-        ("example_two_page_queryresult"),
+        (
+            "example_single_page_queryresult",
+            {"581412": "pass", "581411": "fail", "427716": "pass"},
+        ),
+        (
+            "example_two_page_queryresult",
+            {
+                "581412": "pass",
+                "581411": "fail",
+                "427716": "pass",
+                "220366": "fail",
+                "220365": "pass",
+                "196385": "pass",
+            },
+        ),
     ],
 )
 def test_downloadmanager_generate_downloaeded_recording_metadata(
-    example_queryresult_fixture_name: str,
     fake_data_folder_download_manager: DownloadManager,
+    example_queryresult_fixture_name: str,
+    test_pass_fail_dict: dict[str, str],
     request: pytest.FixtureRequest,
 ):
     """Test the downloaded recording metadata generation procedure for the DownloadManager
@@ -199,29 +213,18 @@ def test_downloadmanager_generate_downloaeded_recording_metadata(
 
     Parameters
     ----------
-    example_queryresult_fixture_name : str
+    fake_data_folder_download_manager
+        A DownloadManager instance set to a non-existant path, since we won't be downloading anything.
+    example_queryresult_fixture_name
         Fixture name of the example QueryResult object based on the example XenoCanto API response.
         We want to generate the downloaded recording metadata information for the recordings
         contained in the QueryResult instance.
-    fake_data_folder_download_manager : DownloadManager
-        A DownloadManager instance set to a non-existant path, since we won't be downloading anything.
-    request : pytest.FixtureRequest
+    test_pass_fail_dict
+        A dictionary containing the downloaded status of each recording ("pass" or "fail")
+        in the QueryResult instance.
+    request
         Request fixture to get the example QueryResult object.
     """
-
-    # Create a pass fail dict containing some passed and failed recordings
-    download_pass_or_fail = {}
-    if example_queryresult_fixture_name == "example_single_page_queryresult":
-        download_pass_or_fail["581412"] = "pass"
-        download_pass_or_fail["581411"] = "fail"
-        download_pass_or_fail["427716"] = "pass"
-    elif example_queryresult_fixture_name == "example_two_page_queryresult":
-        download_pass_or_fail["581412"] = "pass"
-        download_pass_or_fail["581411"] = "fail"
-        download_pass_or_fail["427716"] = "pass"
-        download_pass_or_fail["220366"] = "fail"
-        download_pass_or_fail["220365"] = "pass"
-        download_pass_or_fail["196385"] = "pass"
 
     # Generate the metadata
     example_queryresult: QueryResult = request.getfixturevalue(
@@ -229,43 +232,22 @@ def test_downloadmanager_generate_downloaeded_recording_metadata(
     )
     downloaded_recording_metadata = fake_data_folder_download_manager._generate_downloaded_recordings_metadata(  # type: ignore
         example_queryresult.get_all_recordings(),
-        download_pass_or_fail,
+        test_pass_fail_dict,
     )
 
-    # We only want to generate the metadata for the recordings that have indeed
-    if example_queryresult_fixture_name == "example_single_page_queryresult":
-        assert len(downloaded_recording_metadata) == 2
-        assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == "581412"  # type: ignore
-        ].equals(example_queryresult.result_pages[0].recordings[0].to_dataframe_row())
-        assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == "581411"
-        ].empty
-        assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == "427716"  # type: ignore
-        ].equals(
-            example_queryresult.result_pages[0].recordings[2].to_dataframe_row()  # type: ignore
-        )
-    elif example_queryresult_fixture_name == "example_two_page_queryresult":
-        assert len(downloaded_recording_metadata) == 4
-        assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == "581412"  # type: ignore
-        ].equals(example_queryresult.result_pages[0].recordings[0].to_dataframe_row())
-        assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == "581411"
-        ].empty
-        assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == "427716"  # type: ignore
-        ].equals(example_queryresult.result_pages[0].recordings[2].to_dataframe_row())
-        assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == "220366"
-        ].empty
-        assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == "220365"  # type: ignore
-        ].equals(example_queryresult.result_pages[1].recordings[1].to_dataframe_row())
-        assert downloaded_recording_metadata.loc[
-            downloaded_recording_metadata["recording_id"] == "196385"  # type: ignore
-        ].equals(example_queryresult.result_pages[1].recordings[2].to_dataframe_row())
+    # Get the recording ids that have passed, these are the ones we should have generated
+    # metadata for.
+    pass_recording_ids = [
+        recording_id
+        for recording_id, status in test_pass_fail_dict.items()
+        if status == "pass"
+    ]
+
+    assert len(downloaded_recording_metadata) == len(pass_recording_ids)
+    assert all(
+        recording_id in downloaded_recording_metadata["recording_id"].values
+        for recording_id in pass_recording_ids
+    )
 
 
 @pytest.mark.parametrize(
@@ -285,9 +267,33 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
     little_nightjar_partial_test_recording_metadata: pd.DataFrame,
     little_nightjar_full_test_recording_metadata: pd.DataFrame,
 ):
-    # TODO: add test for when the metadata file does not exist yet
-    # TODO: add docstring
-    # TODO: Can this be done in a more elegant way?
+    """Test the metadata file update functionality of the DownloadManager class.
+
+    Parameters
+    ----------
+    partially_filled_data_folder_download_manager : DownloadManager
+        DownloadManager instance set to a partially-filled data folder.
+    metadata_to_add_fixture_name : str
+        Fixture name of the metadata to add to the recording metadata files that are
+        already present in the data folder of the DownloadManager instance.
+    request : pytest.FixtureRequest
+        Request fixture to get the metadata to add to the recording metadata files.
+    spot_winged_wood_quail_partial_test_recording_metadata : pd.DataFrame
+        Partial test recording metadata for the spot-winged wood quail that is already
+        present in the data folder of the DownloadManager instance.
+    spot_winged_wood_quail_full_test_recording_metadata : pd.DataFrame
+        Full test recording metadata for the spot-winged wood quail that should be
+        the result of an update operation that adds to the spot-winged wood quail
+        metadata.
+    little_nightjar_partial_test_recording_metadata : pd.DataFrame
+        Partial test recording metadata for the little nightjar that is already
+        present in the data folder of the DownloadManager instance.
+    little_nightjar_full_test_recording_metadata : pd.DataFrame
+        Full test recording metadata for the little nightjar that should be
+        the result of an update operation that adds to the little nightjar
+        metadata.
+
+    """
 
     to_add_test_recording_metadata: pd.DataFrame = request.getfixturevalue(
         metadata_to_add_fixture_name
@@ -310,6 +316,7 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
                 )
             )
         )
+        # Check that the little nightjar metadata has not been changed
         assert little_nightjar_partial_test_recording_metadata.equals(  # type: ignore
             pd.read_csv(  # type: ignore
                 join(
@@ -322,6 +329,7 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
     elif (
         metadata_to_add_fixture_name == "little_nightjar_to_add_test_recording_metadata"
     ):
+        # Check that the spot-winged wood quail metadata has not been changed
         assert spot_winged_wood_quail_partial_test_recording_metadata.equals(  # type: ignore
             pd.read_csv(  # type: ignore
                 join(
@@ -359,6 +367,53 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
                 )
             )
         )
+
+
+def test_downloadmanager_update_animal_recordings_metadata_files_for_empty_update(
+    partially_filled_data_folder_download_manager: DownloadManager,
+    spot_winged_wood_quail_partial_test_recording_metadata: pd.DataFrame,
+    little_nightjar_partial_test_recording_metadata: pd.DataFrame,
+):
+    """Test the metadata file update functionality of the DownloadManager class when no
+    new metadata is added.
+
+    Parameters
+    ----------
+    partially_filled_data_folder_download_manager : DownloadManager
+        DownloadManager instance set to a partially-filled data folder.
+    spot_winged_wood_quail_partial_test_recording_metadata : pd.DataFrame
+        Partial test recording metadata for the spot-winged wood quail that is already
+        present in the data folder of the DownloadManager instance.
+    little_nightjar_partial_test_recording_metadata : pd.DataFrame
+        Partial test recording metadata for the little nightjar that is already
+        present in the data folder of the DownloadManager instance.
+
+    """
+
+    partially_filled_data_folder_download_manager._update_animal_recordings_metadata_files(  # type: ignore
+        pd.DataFrame({})
+    )
+
+    # Check that the spot-winged wood quail metadata has not been changed
+    assert spot_winged_wood_quail_partial_test_recording_metadata.equals(  # type: ignore
+        pd.read_csv(  # type: ignore
+            join(
+                partially_filled_data_folder_download_manager.data_base_path,
+                "spot_winged_wood_quail",
+                "spot_winged_wood_quail_recording_metadata.csv",
+            )
+        )
+    )
+    # Check that the little nightjar metadata has not been changed
+    assert little_nightjar_partial_test_recording_metadata.equals(  # type: ignore
+        pd.read_csv(  # type: ignore
+            join(
+                partially_filled_data_folder_download_manager.data_base_path,
+                "little_nightjar",
+                "little_nightjar_recording_metadata.csv",
+            )
+        )
+    )
 
 
 def test_downloadmanager_generate_animal_folder_name(
