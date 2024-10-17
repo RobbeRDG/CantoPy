@@ -8,7 +8,7 @@ def test_recording_init(
 
     Parameters
     ----------
-    example_recording_1_from_example_xenocanto_query_response_page_1 : Recording
+    example_recording_1_from_example_xenocanto_query_response_page_1
         A Recording object based on the first recording in the example page 1 XenoCanto
         API query response.
     """
@@ -147,7 +147,7 @@ def test_to_dataframe_row(
 
     Parameters
     ----------
-    example_recording_1_from_example_xenocanto_query_response_page_1 : Recording
+    example_recording_1_from_example_xenocanto_query_response_page_1
         A Recording object based on the first recording in the example page 1 XenoCanto
         API query response.
     """
@@ -198,4 +198,3 @@ def test_to_dataframe_row(
     assert example_recording_df_row["recording_device"][0] == ""
     assert example_recording_df_row["microphone_used"][0] == ""
     assert example_recording_df_row["sample_rate"][0] == "48000"
-

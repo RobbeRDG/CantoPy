@@ -1,6 +1,7 @@
 from cantopy.xenocanto_components import ResultPage, QueryResult
 import pytest
 
+
 @pytest.mark.parametrize(
     "example_queryresult_fixture_name, expected_num_pages",
     [
@@ -19,15 +20,15 @@ def test_query_result_initialization(
 
     Parameters
     ----------
-    example_queryresult_fixture_name : str
+    example_queryresult_fixture_name
         Fixture name of the example QueryResult object based on the example XenoCanto API response.
-    expected_num_pages : int
+    expected_num_pages
         Expected number of ResultPage instances in the QueryResult object.
-    example_result_page_page_1 : ResultPage
+    example_result_page_page_1
         Example ResultPage object based on the example page 2 XenoCanto API response.
-    example_result_page_page_2 : ResultPage
+    example_result_page_page_2
         Example ResultPage object based on the example page 2 XenoCanto API response.
-    request : pytest.FixtureRequest
+    request
         Request fixture to get the example QueryResult object.
     """
     example_queryresult: QueryResult = request.getfixturevalue(
@@ -65,13 +66,13 @@ def test_query_result_get_all_recordings(
 
     Parameters
     ----------
-    example_queryresult_fixture_name : str
+    example_queryresult_fixture_name
         Fixture name of the example QueryResult object based on the example XenoCanto API response.
-    example_result_page_page_1 : ResultPage
+    example_result_page_page_1
         Example ResultPage object based on the example page 1 XenoCanto API response.
-    example_result_page_page_2 : ResultPage
+    example_result_page_page_2
         Example ResultPage object based on the example page 2 XenoCanto API response.
-    request : pytest.FixtureRequest
+    request
         Request fixture to get the example QueryResult object.
     """
 

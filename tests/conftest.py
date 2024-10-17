@@ -13,7 +13,6 @@ from cantopy.xenocanto_components import QueryResult, Recording, ResultPage
 from cantopy import DownloadManager
 
 
-
 ######################################################################
 #### CONSTANTS
 ######################################################################
@@ -25,6 +24,7 @@ TEST_DATA_BASE_FOLDER_PATH = (
 ######################################################################
 #### XENOCANTO COMPONENT FIXTURES
 ######################################################################
+
 
 @pytest.fixture(scope="session")
 def example_fake_xenocanto_recording() -> Recording:
@@ -120,7 +120,7 @@ def example_query_metadata_page_1(
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_1 : Dict[str, str | int | List[Dict[str, str]]]
+    example_xenocanto_query_response_page_1
         The dictionary representation of example XenoCanto API query response.
 
     Returns
@@ -164,7 +164,7 @@ def example_query_metadata_page_2(
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_2 : Dict[str, str | int | List[Dict[str, str]]]
+    example_xenocanto_query_response_page_2
         The dictionary representation of example page 2 XenoCanto API query response.
 
     Returns
@@ -207,7 +207,7 @@ def example_result_page_page_1(
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_1 : Dict[str, str | int | List[Dict[str, str]]]
+    example_xenocanto_query_response_page_1
         The dictionary representation of example page 1 XenoCanto API query response.
 
     Returns
@@ -226,7 +226,7 @@ def example_result_page_page_2(
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_2 : Dict[str, str | int | List[Dict[str, str]]]
+    example_xenocanto_query_response_page_2
         The dictionary representation of example page 2 XenoCanto API query response.
 
     Returns
@@ -246,7 +246,7 @@ def example_recording_1_from_example_xenocanto_query_response_page_1(
 
     Parameters
     ----------
-    example_xenocanto_query_response_page_1 : Dict[str, str | int | List[Dict[str, str]]]
+    example_xenocanto_query_response_page_1
         The dictionary representation of example page 1 XenoCanto API query response.
 
     Returns
@@ -275,9 +275,9 @@ def example_single_page_queryresult(
 
     Parameters
     ----------
-    example_query_metadata_page_1 : Dict[str, str | int | List[Dict[str, str]]]
+    example_query_metadata_page_1
         The extracted metadata from the example page 1 XenoCanto API query response.
-    example_result_page : ResultPage
+    example_result_page
         The ResultPage object created from the example page 1 XenoCanto API query response
 
     Returns
@@ -300,12 +300,12 @@ def example_two_page_queryresult(
 
     Parameters
     ----------
-    example_query_metadata_page_1 : Dict[str, int]
+    example_query_metadata_page_1
         The extracted metadata from the example page 1 XenoCanto API query response.
         Page 2 metadata is the same as page 1 metadata, so this is not needed.
-    example_result_page_page_1 : ResultPage
+    example_result_page_page_1
         The ResultPage object created from the example page 1 XenoCanto API query response.
-    example_result_page_page_2 : ResultPage
+    example_result_page_page_2
         The ResultPage object created from the example page 2 XenoCanto API query response.
 
     Returns
@@ -368,10 +368,10 @@ def partially_filled_download_data_base_path(
 
     Parameters
     ----------
-    spot_winged_wood_quail_partial_test_recording_metadata : pd.DataFrame
+    spot_winged_wood_quail_partial_test_recording_metadata
         The test recording metadata for the spot-winged wood quail recordings that are already
         present.
-    little_nightjar_partial_test_recording_metadata : pd.DataFrame
+    little_nightjar_partial_test_recording_metadata
         The test recording metadata for the little nightjar recordings that are already
         present.
 
@@ -424,7 +424,7 @@ def empty_data_folder_download_manager(empty_download_data_base_path: str):
 
     Parameters
     ----------
-    empty_download_data_base_path : str
+    empty_download_data_base_path
         The path to a newly created empty download folder.
 
     Returns
@@ -443,7 +443,7 @@ def partially_filled_data_folder_download_manager(
 
     Parameters
     ----------
-    partially_filled_download_data_base_path : str
+    partially_filled_download_data_base_path
         The path to a newly created but partially-filled data folder.
 
     Returns
@@ -515,9 +515,9 @@ def combined_full_test_recording_metadata(
 
     Parameters
     ----------
-    little_nightjar_full_test_recording_metadata : pd.DataFrame
+    little_nightjar_full_test_recording_metadata
         The loaded full test recording metadata for the little nightjar.
-    spot_winged_wood_quail_full_test_recording_metadata : pd.DataFrame
+    spot_winged_wood_quail_full_test_recording_metadata
         The loaded full test recording metadata for the spot-winged wood quail.
 
     Returns
@@ -582,9 +582,9 @@ def combined_partial_test_recording_metadata(
 
     Parameters
     ----------
-    little_nightjar_partial_test_recording_metadata : pd.DataFrame
+    little_nightjar_partial_test_recording_metadata
         The loaded partial test recording metadata for the little nightjar.
-    spot_winged_wood_quail_partial_test_recording_metadata : pd.DataFrame
+    spot_winged_wood_quail_partial_test_recording_metadata
         The loaded partial test recording metadata for the spot-winged wood quail.
 
     Returns
@@ -649,9 +649,9 @@ def combined_to_add_test_recording_metadata(
 
     Parameters
     ----------
-    little_nightjar_to_add_test_recording_metadata : pd.DataFrame
+    little_nightjar_to_add_test_recording_metadata
         The loaded test recording metadata for the little nightjar we want to add.
-    spot_winged_wood_quail_to_add_test_recording_metadata : pd.DataFrame
+    spot_winged_wood_quail_to_add_test_recording_metadata
         The loaded test recording metadata for the spot-winged wood quail we want to add.
 
     Returns

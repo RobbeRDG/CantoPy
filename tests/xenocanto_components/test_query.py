@@ -25,7 +25,7 @@ def test_to_string(query_for_tostring_test: Query):
 
     Parameters
     ----------
-    query_for_tostring_test : Query
+    query_for_tostring_test
         The Query object to test the to_string method on.
     """
     assert (
