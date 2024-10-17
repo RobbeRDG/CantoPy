@@ -52,9 +52,9 @@ def test_query_multipage(fetch_manager: FetchManager, query: Query):
 
     Parameters
     ----------
-    fetch_manager : FetchManager
+    fetch_manager
         An instance of the FetchManager class.
-    query : Query
+    query
         The Query object to send to the XenoCanto API.
     """
 

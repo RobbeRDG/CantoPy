@@ -27,16 +27,16 @@ def test_downloadmanager_download_recordings(
 
     Parameters
     ----------
-    empty_data_folder_download_manager : DownloadManager
+    empty_data_folder_download_manager
         DownloadManager instance set to an empty data folder.
-    example_queryresult_fixture_name : str
+    example_queryresult_fixture_name
         Fixture name of the example QueryResult object based on the example XenoCanto API responses.
-    add_fake_recording : bool
+    add_fake_recording
         Whether to add a fake recording to the recordings to download in order to test fail
         scenarios.
-    example_fake_xenocanto_recording : Recording
+    example_fake_xenocanto_recording
         Example fake recording to add to the recordings to download in order to test fail
-    request : pytest.FixtureRequest
+    request
         Request fixture to get the example QueryResult object.
     """
     example_queryresult: QueryResult = request.getfixturevalue(
@@ -151,11 +151,11 @@ def test_downloadmanager_detect_already_donwloaded_recordings(
 
     Parameters
     ----------
-    example_queryresult_fixture_name : str
+    example_queryresult_fixture_name
         Fixture name of the example QueryResult object based on the example XenoCanto API response.
-    partially_filled_data_folder_download_manager : DownloadManager
+    partially_filled_data_folder_download_manager
         DownloadManager instance set to a partially-filled data folder.
-    request : pytest.FixtureRequest
+    request
         Request fixture to get the example QueryResult object.
     """
     example_queryresult: QueryResult = request.getfixturevalue(
@@ -271,24 +271,24 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
 
     Parameters
     ----------
-    partially_filled_data_folder_download_manager : DownloadManager
+    partially_filled_data_folder_download_manager
         DownloadManager instance set to a partially-filled data folder.
-    metadata_to_add_fixture_name : str
+    metadata_to_add_fixture_name
         Fixture name of the metadata to add to the recording metadata files that are
         already present in the data folder of the DownloadManager instance.
-    request : pytest.FixtureRequest
+    request
         Request fixture to get the metadata to add to the recording metadata files.
-    spot_winged_wood_quail_partial_test_recording_metadata : pd.DataFrame
+    spot_winged_wood_quail_partial_test_recording_metadata
         Partial test recording metadata for the spot-winged wood quail that is already
         present in the data folder of the DownloadManager instance.
-    spot_winged_wood_quail_full_test_recording_metadata : pd.DataFrame
+    spot_winged_wood_quail_full_test_recording_metadata
         Full test recording metadata for the spot-winged wood quail that should be
         the result of an update operation that adds to the spot-winged wood quail
         metadata.
-    little_nightjar_partial_test_recording_metadata : pd.DataFrame
+    little_nightjar_partial_test_recording_metadata
         Partial test recording metadata for the little nightjar that is already
         present in the data folder of the DownloadManager instance.
-    little_nightjar_full_test_recording_metadata : pd.DataFrame
+    little_nightjar_full_test_recording_metadata
         Full test recording metadata for the little nightjar that should be
         the result of an update operation that adds to the little nightjar
         metadata.
@@ -379,12 +379,12 @@ def test_downloadmanager_update_animal_recordings_metadata_files_for_empty_updat
 
     Parameters
     ----------
-    partially_filled_data_folder_download_manager : DownloadManager
+    partially_filled_data_folder_download_manager
         DownloadManager instance set to a partially-filled data folder.
-    spot_winged_wood_quail_partial_test_recording_metadata : pd.DataFrame
+    spot_winged_wood_quail_partial_test_recording_metadata
         Partial test recording metadata for the spot-winged wood quail that is already
         present in the data folder of the DownloadManager instance.
-    little_nightjar_partial_test_recording_metadata : pd.DataFrame
+    little_nightjar_partial_test_recording_metadata
         Partial test recording metadata for the little nightjar that is already
         present in the data folder of the DownloadManager instance.
 
@@ -423,7 +423,7 @@ def test_downloadmanager_generate_animal_folder_name(
 
     Parameters
     ----------
-    fake_data_folder_download_manager : DownloadManager
+    fake_data_folder_download_manager
         DownloadManager instance set to a non-existant path, since we won't be downloading anything.
     """
     # Spaces should be replaced by "_"

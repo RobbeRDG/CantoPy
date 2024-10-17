@@ -1,11 +1,12 @@
 from cantopy.xenocanto_components import ResultPage
 
+
 def test_resultpage_init(example_result_page_page_1: ResultPage):
     """Test for the initialisation of a ResultPage object.
 
     Parameters
     ----------
-    example_result_page_page_1 : ResultPage
+    example_result_page_page_1
         The ResultPage object created from the example page 1 XenoCanto API query response
     """
 
