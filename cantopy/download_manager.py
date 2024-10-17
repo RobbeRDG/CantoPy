@@ -166,7 +166,11 @@ class DownloadManager:
         """
 
         # Get the list of animals
-        animals = downloaded_recordings_metadata["english_name"].unique()  # type: ignore
+        animals = (
+            downloaded_recordings_metadata["english_name"].unique()
+            if len(downloaded_recordings_metadata) > 0
+            else []
+        )
 
         # For each animal, update its metadata file
         for animal in animals:
