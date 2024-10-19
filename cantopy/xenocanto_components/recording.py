@@ -115,7 +115,6 @@ class Recording:
         self.recording_length = recording_data.get("length", "")
         self.recording_date = recording_data.get("date", "")
         self.recording_time = recording_data.get("time", "")
-        self.date = recording_data.get("date", "")
         self.upload_date = recording_data.get("uploaded", "")
         self.recording_url = recording_data.get("url", "")
         self.audio_file_url = recording_data.get("file", "")
@@ -160,7 +159,6 @@ class Recording:
             "recording_length": [self.recording_length],
             "recording_date": [self.recording_date],
             "recording_time": [self.recording_time],
-            "date": [self.date],
             "upload_date": [self.upload_date],
             "recording_url": [self.recording_url],
             "audio_file_url": [self.audio_file_url],
