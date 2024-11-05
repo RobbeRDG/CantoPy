@@ -5,9 +5,6 @@ import os
 from os.path import join
 import pandas as pd
 import shutil
-import sys
-
-print(sys.path)
 
 from cantopy.xenocanto_components import QueryResult, Recording, ResultPage
 from cantopy import DownloadManager
@@ -17,9 +14,7 @@ from cantopy import DownloadManager
 #### CONSTANTS
 ######################################################################
 TEST_MAX_WORKERS = 8
-TEST_DATA_BASE_FOLDER_PATH = (
-    "/workspaces/CantoPy/resources/test_resources/test_data_folders"
-)
+TEST_DATA_BASE_FOLDER_PATH = "/workspaces/CantoPy/tests/resources"
 
 ######################################################################
 #### XENOCANTO COMPONENT FIXTURES
@@ -38,7 +33,7 @@ def example_fake_xenocanto_recording() -> Recording:
 
     # Open the example fake XenoCanto recording
     with open(
-        "resources/test_resources/example_fake_xenocanto_recording.json",
+        join(TEST_DATA_BASE_FOLDER_PATH, "example_fake_xenocanto_recording.json"),
         "r",
         encoding="utf-8",
     ) as file:
@@ -61,7 +56,9 @@ def example_zero_day_xenocanto_recording() -> Recording:
 
     # Open the example fake XenoCanto recording
     with open(
-        "resources/test_resources/example_zero_day_date_xenocanto_recording.json",
+        join(
+            TEST_DATA_BASE_FOLDER_PATH, "example_zero_day_date_xenocanto_recording.json"
+        ),
         "r",
         encoding="utf-8",
     ) as file:
@@ -83,7 +80,9 @@ def example_xenocanto_query_response_page_1() -> (
 
     # Open the example XenoCanto query response
     with open(
-        "resources/test_resources/example_xenocanto_query_response_page_1.json",
+        join(
+            TEST_DATA_BASE_FOLDER_PATH, "example_xenocanto_query_response_page_1.json"
+        ),
         "r",
         encoding="utf-8",
     ) as file:
@@ -105,7 +104,9 @@ def example_xenocanto_query_response_page_2() -> (
 
     # Open the example XenoCanto query response
     with open(
-        "resources/test_resources/example_xenocanto_query_response_page_2.json",
+        join(
+            TEST_DATA_BASE_FOLDER_PATH, "example_xenocanto_query_response_page_2.json"
+        ),
         "r",
         encoding="utf-8",
     ) as file:
@@ -481,7 +482,11 @@ def little_nightjar_full_test_recording_metadata() -> pd.DataFrame:
     """
     return (
         pd.read_csv(  # type: ignore
-            "resources/test_resources/little_nightjar_full_test_recording_metadata.csv"
+            join(
+                TEST_DATA_BASE_FOLDER_PATH,
+                "little_nightjar_full_test_recording_metadata.csv",
+            ),
+            dtype=object,
         )
         .sort_values(by=["recording_id"])
         .reset_index(drop=True)
@@ -499,7 +504,11 @@ def spot_winged_wood_quail_full_test_recording_metadata() -> pd.DataFrame:
     """
     return (
         pd.read_csv(  # type: ignore
-            "resources/test_resources/spot_winged_wood_quail_full_test_recording_metadata.csv"
+            join(
+                TEST_DATA_BASE_FOLDER_PATH,
+                "spot_winged_wood_quail_full_test_recording_metadata.csv",
+            ),
+            dtype=object,
         )
         .sort_values(by=["recording_id"])
         .reset_index(drop=True)
@@ -548,7 +557,11 @@ def little_nightjar_partial_test_recording_metadata() -> pd.DataFrame:
     """
     return (
         pd.read_csv(  # type: ignore
-            "resources/test_resources/little_nightjar_partial_test_recording_metadata.csv"
+            join(
+                TEST_DATA_BASE_FOLDER_PATH,
+                "little_nightjar_partial_test_recording_metadata.csv",
+            ),
+            dtype=object,
         )
         .sort_values(by=["recording_id"])
         .reset_index(drop=True)
@@ -566,7 +579,11 @@ def spot_winged_wood_quail_partial_test_recording_metadata() -> pd.DataFrame:
     """
     return (
         pd.read_csv(  # type: ignore
-            "resources/test_resources/spot_winged_wood_quail_partial_test_recording_metadata.csv"
+            join(
+                TEST_DATA_BASE_FOLDER_PATH,
+                "spot_winged_wood_quail_partial_test_recording_metadata.csv",
+            ),
+            dtype=object,
         )
         .sort_values(by=["recording_id"])
         .reset_index(drop=True)
@@ -615,7 +632,11 @@ def little_nightjar_to_add_test_recording_metadata() -> pd.DataFrame:
     """
     return (
         pd.read_csv(  # type: ignore
-            "resources/test_resources/little_nightjar_to_add_test_recording_metadata.csv"
+            join(
+                TEST_DATA_BASE_FOLDER_PATH,
+                "little_nightjar_to_add_test_recording_metadata.csv",
+            ),
+            dtype=object,
         )
         .sort_values(by=["recording_id"])
         .reset_index(drop=True)
@@ -633,7 +654,11 @@ def spot_winged_wood_quail_to_add_test_recording_metadata() -> pd.DataFrame:
     """
     return (
         pd.read_csv(  # type: ignore
-            "resources/test_resources/spot_winged_wood_quail_to_add_test_recording_metadata.csv"
+            join(
+                TEST_DATA_BASE_FOLDER_PATH,
+                "spot_winged_wood_quail_to_add_test_recording_metadata.csv",
+            ),
+            dtype=object,
         )
         .sort_values(by=["recording_id"])
         .reset_index(drop=True)

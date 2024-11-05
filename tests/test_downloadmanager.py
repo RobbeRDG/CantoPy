@@ -307,65 +307,81 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
         metadata_to_add_fixture_name
         == "spot_winged_wood_quail_to_add_test_recording_metadata"
     ):
-        assert spot_winged_wood_quail_full_test_recording_metadata.equals(  # type: ignore
+        pd.testing.assert_frame_equal(
+            spot_winged_wood_quail_full_test_recording_metadata,
             pd.read_csv(  # type: ignore
                 join(
                     partially_filled_data_folder_download_manager.data_base_path,
                     "spot_winged_wood_quail",
                     "spot_winged_wood_quail_recording_metadata.csv",
-                )
-            )
+                ),
+                dtype="object",
+            ),
         )
+
         # Check that the little nightjar metadata has not been changed
-        assert little_nightjar_partial_test_recording_metadata.equals(  # type: ignore
+        pd.testing.assert_frame_equal(
+            little_nightjar_partial_test_recording_metadata,
             pd.read_csv(  # type: ignore
                 join(
                     partially_filled_data_folder_download_manager.data_base_path,
                     "little_nightjar",
                     "little_nightjar_recording_metadata.csv",
-                )
-            )
+                ),
+                dtype="object",
+            ),
         )
     elif (
         metadata_to_add_fixture_name == "little_nightjar_to_add_test_recording_metadata"
     ):
         # Check that the spot-winged wood quail metadata has not been changed
-        assert spot_winged_wood_quail_partial_test_recording_metadata.equals(  # type: ignore
+        pd.testing.assert_frame_equal(
+            spot_winged_wood_quail_partial_test_recording_metadata,
             pd.read_csv(  # type: ignore
                 join(
                     partially_filled_data_folder_download_manager.data_base_path,
                     "spot_winged_wood_quail",
                     "spot_winged_wood_quail_recording_metadata.csv",
-                )
-            )
+                ),
+                dtype="object",
+            ),
         )
-        assert little_nightjar_full_test_recording_metadata.equals(  # type: ignore
+
+        pd.testing.assert_frame_equal(
+            little_nightjar_full_test_recording_metadata,
             pd.read_csv(  # type: ignore
                 join(
                     partially_filled_data_folder_download_manager.data_base_path,
                     "little_nightjar",
                     "little_nightjar_recording_metadata.csv",
-                )
-            )
+                ),
+                dtype="object",
+            ),
         )
+
     elif metadata_to_add_fixture_name == "combined_to_add_test_recording_metadata":
-        assert spot_winged_wood_quail_full_test_recording_metadata.equals(  # type: ignore
+        pd.testing.assert_frame_equal(
+            spot_winged_wood_quail_full_test_recording_metadata,
             pd.read_csv(  # type: ignore
                 join(
                     partially_filled_data_folder_download_manager.data_base_path,
                     "spot_winged_wood_quail",
                     "spot_winged_wood_quail_recording_metadata.csv",
-                )
-            )
+                ),
+                dtype="object",
+            ),
         )
-        assert little_nightjar_full_test_recording_metadata.equals(  # type: ignore
+
+        pd.testing.assert_frame_equal(
+            little_nightjar_full_test_recording_metadata,
             pd.read_csv(  # type: ignore
                 join(
                     partially_filled_data_folder_download_manager.data_base_path,
                     "little_nightjar",
                     "little_nightjar_recording_metadata.csv",
-                )
-            )
+                ),
+                dtype="object",
+            ),
         )
 
 
@@ -395,24 +411,29 @@ def test_downloadmanager_update_animal_recordings_metadata_files_for_empty_updat
     )
 
     # Check that the spot-winged wood quail metadata has not been changed
-    assert spot_winged_wood_quail_partial_test_recording_metadata.equals(  # type: ignore
+    pd.testing.assert_frame_equal(
+        spot_winged_wood_quail_partial_test_recording_metadata,
         pd.read_csv(  # type: ignore
             join(
                 partially_filled_data_folder_download_manager.data_base_path,
                 "spot_winged_wood_quail",
                 "spot_winged_wood_quail_recording_metadata.csv",
-            )
-        )
+            ),
+            dtype="object",
+        ),
     )
+
     # Check that the little nightjar metadata has not been changed
-    assert little_nightjar_partial_test_recording_metadata.equals(  # type: ignore
+    pd.testing.assert_frame_equal(
+        little_nightjar_partial_test_recording_metadata,
         pd.read_csv(  # type: ignore
             join(
                 partially_filled_data_folder_download_manager.data_base_path,
                 "little_nightjar",
                 "little_nightjar_recording_metadata.csv",
-            )
-        )
+            ),
+            dtype="object",
+        ),
     )
 
 

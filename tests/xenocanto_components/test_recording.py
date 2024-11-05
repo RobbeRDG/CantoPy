@@ -1,4 +1,5 @@
 from cantopy.xenocanto_components import Recording
+import pandas as pd
 
 
 def test_recording_init(
@@ -108,7 +109,7 @@ def test_recording_init(
     )
     assert (
         example_recording_1_from_example_xenocanto_query_response_page_1.background_species
-        == ["Sclerurus scansor"]
+        == "['Sclerurus scansor']"
     )
     assert (
         example_recording_1_from_example_xenocanto_query_response_page_1.recordist_remarks
@@ -190,11 +191,11 @@ def test_to_dataframe_row(
     assert example_recording_df_row["recording_time"][0] == "08:00"
     assert example_recording_df_row["recording_date"][0] == "2020-08-02"
     assert example_recording_df_row["upload_date"][0] == "2020-08-09"
-    assert example_recording_df_row["background_species"][0] == ["Sclerurus scansor"]
-    assert example_recording_df_row["recordist_remarks"][0] == ""
+    assert example_recording_df_row["background_species"][0] == "['Sclerurus scansor']"
+    assert pd.isna(example_recording_df_row["recordist_remarks"][0])  # type: ignore
     assert example_recording_df_row["animal_seen"][0] == "yes"
     assert example_recording_df_row["playback_used"][0] == "yes"
     assert example_recording_df_row["automatic_recording"][0] == "no"
-    assert example_recording_df_row["recording_device"][0] == ""
-    assert example_recording_df_row["microphone_used"][0] == ""
+    assert pd.isna(example_recording_df_row["recording_device"][0])  # type: ignore
+    assert pd.isna(example_recording_df_row["microphone_used"][0])  # type: ignore
     assert example_recording_df_row["sample_rate"][0] == "48000"
