@@ -5,6 +5,7 @@ from os.path import exists, join
 import pandas as pd
 import requests
 import os
+import numpy as np
 
 
 class DownloadManager:
@@ -167,7 +168,7 @@ class DownloadManager:
 
         # Get the list of animals
         animals = (
-            downloaded_recordings_metadata["english_name"].unique()
+            list(downloaded_recordings_metadata["english_name"].unique())  # type: ignore
             if len(downloaded_recordings_metadata) > 0
             else []
         )
@@ -185,7 +186,7 @@ class DownloadManager:
             )
 
             # Get the animal metadata file
-            animal_metadata = pd.read_csv(animal_metadata_file_path)  # type: ignore
+            animal_metadata = pd.read_csv(animal_metadata_file_path, dtype="object")  # type: ignore
 
             # Append the new metadata to the animal metadata file
             animal_metadata = pd.concat(  # type: ignore
@@ -198,8 +199,18 @@ class DownloadManager:
                 ignore_index=True,
             )
 
+            # Temporarily set the recording_id column to be of type int64 for sorting
+            animal_metadata["recording_id"] = animal_metadata["recording_id"].astype(
+                np.int64
+            )
+
             # Sort the animal metadata file by recording id
             animal_metadata = animal_metadata.sort_values(by=["recording_id"])  # type: ignore
+
+            # Reset the recording_id column to be of type object
+            animal_metadata["recording_id"] = animal_metadata["recording_id"].astype(
+                "object"
+            )
 
             # Update the animal metadata file
             animal_metadata.to_csv(animal_metadata_file_path, index=False)

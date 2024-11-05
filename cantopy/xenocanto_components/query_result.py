@@ -1,5 +1,6 @@
 from cantopy.xenocanto_components.result_page import ResultPage
 from cantopy.xenocanto_components.recording import Recording
+import pandas as pd
 
 
 class QueryResult:
@@ -61,3 +62,24 @@ class QueryResult:
 
         # Return the list of recordings
         return all_recordings
+    
+    def get_all_recordings_metadata(self) -> pd.DataFrame:
+        """Return all the recordings metadata contained in this QueryResult, across all 
+        ResultPages.
+
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame containing all the recordings metadata contained in this 
+            QueryResult.
+
+        """
+
+        all_recordings = self.get_all_recordings()
+
+        all_recordings_metadata = pd.concat(
+            [recording.to_dataframe_row() for recording in all_recordings],
+            ignore_index=True
+        )
+
+        return pd.DataFrame(all_recordings_metadata)

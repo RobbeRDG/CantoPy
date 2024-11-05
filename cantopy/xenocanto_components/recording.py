@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 class Recording:
@@ -93,44 +94,44 @@ class Recording:
         """
 
         # Id
-        self.recording_id = recording_data.get("id", 0)
+        self.recording_id = str(recording_data.get("id", "0"))
 
         # Animal information
-        self.generic_name = recording_data.get("gen", "")
-        self.specific_name = recording_data.get("sp", "")
-        self.subspecies_name = recording_data.get("ssp", "")
-        self.species_group = recording_data.get("group", "")
-        self.english_name = recording_data.get("en", "")
-        self.sound_type = recording_data.get("type", "")
-        self.sex = recording_data.get("sex", "")
-        self.life_stage = recording_data.get("stage", "")
-        self.background_species = recording_data.get("also", "")
-        self.animal_seen = recording_data.get("animal-seen", "")
+        self.generic_name = str(recording_data.get("gen", ""))
+        self.specific_name = str(recording_data.get("sp", ""))
+        self.subspecies_name = str(recording_data.get("ssp", ""))
+        self.species_group = str(recording_data.get("group", ""))
+        self.english_name = str(recording_data.get("en", ""))
+        self.sound_type = str(recording_data.get("type", ""))
+        self.sex = str(recording_data.get("sex", ""))
+        self.life_stage = str(recording_data.get("stage", ""))
+        self.background_species = str(recording_data.get("also", ""))
+        self.animal_seen = str(recording_data.get("animal-seen", ""))
 
         # Recording information
-        self.recordist_name = recording_data.get("rec", "")
-        self.recording_method = recording_data.get("method", "")
-        self.license_url = recording_data.get("lic", "")
-        self.quality_rating = recording_data.get("q", "")
-        self.recording_length = recording_data.get("length", "")
-        self.recording_date = recording_data.get("date", "")
-        self.recording_time = recording_data.get("time", "")
-        self.date = recording_data.get("date", "")
-        self.upload_date = recording_data.get("uploaded", "")
-        self.recording_url = recording_data.get("url", "")
-        self.audio_file_url = recording_data.get("file", "")
-        self.recordist_remarks = recording_data.get("rmk", "")
-        self.playback_used = recording_data.get("playback-used", "")
-        self.automatic_recording = recording_data.get("auto", "")
-        self.recording_device = recording_data.get("dvc", "")
-        self.microphone_used = recording_data.get("mic", "")
-        self.sample_rate = recording_data.get("smp", 0)
+        self.recordist_name = str(recording_data.get("rec", ""))
+        self.recording_method = str(recording_data.get("method", ""))
+        self.license_url = str(recording_data.get("lic", ""))
+        self.quality_rating = str(recording_data.get("q", ""))
+        self.recording_length = str(recording_data.get("length", ""))
+        self.recording_date = str(recording_data.get("date", ""))
+        self.recording_time = str(recording_data.get("time", ""))
+        self.upload_date = str(recording_data.get("uploaded", ""))
+        self.recording_url = str(recording_data.get("url", ""))
+        self.audio_file_url = str(recording_data.get("file", ""))
+        self.recordist_remarks = str(recording_data.get("rmk", ""))
+        self.playback_used = str(recording_data.get("playback-used", ""))
+        self.automatic_recording = str(recording_data.get("auto", ""))
+        self.recording_device = str(recording_data.get("dvc", ""))
+        self.microphone_used = str(recording_data.get("mic", ""))
+        self.sample_rate = str(recording_data.get("smp", "0"))
+
         # Location information
-        self.country = recording_data.get("cnt", "")
-        self.locality_name = recording_data.get("loc", "")
-        self.latitude = recording_data.get("lat", "")
-        self.longitude = recording_data.get("lng", "")
-        self.temperature = recording_data.get("temp", "")
+        self.country = str(recording_data.get("cnt", ""))
+        self.locality_name = str(recording_data.get("loc", ""))
+        self.latitude = str(recording_data.get("lat", ""))
+        self.longitude = str(recording_data.get("lng", ""))
+        self.temperature = str(recording_data.get("temp", ""))
 
     def to_dataframe_row(self) -> pd.DataFrame:
         """Convert the Recording object to a pandas DataFrame row.
@@ -141,7 +142,7 @@ class Recording:
             A pandas DataFrame row containing the recording information.
         """
 
-        data = {
+        data: dict[str, list[str]] = {
             "recording_id": [self.recording_id],
             "generic_name": [self.generic_name],
             "specific_name": [self.specific_name],
@@ -160,7 +161,6 @@ class Recording:
             "recording_length": [self.recording_length],
             "recording_date": [self.recording_date],
             "recording_time": [self.recording_time],
-            "date": [self.date],
             "upload_date": [self.upload_date],
             "recording_url": [self.recording_url],
             "audio_file_url": [self.audio_file_url],
@@ -177,4 +177,12 @@ class Recording:
             "temperature": [self.temperature],
         }
 
-        return pd.DataFrame(data)
+        row_data = pd.DataFrame(data)
+
+        # Replace empty strings with NaN
+        row_data = row_data.replace("", np.nan)  # type: ignore
+
+        # Set all column data types to object
+        row_data = row_data.astype("object")  # type: ignore
+
+        return row_data
