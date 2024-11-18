@@ -185,22 +185,29 @@ class DownloadManager:
                 f"{animal_folder_name}_recording_metadata.csv",
             )
 
-            # Get the animal metadata file
-            animal_metadata = pd.read_csv(animal_metadata_file_path, dtype="object")  # type: ignore
+            # If a previous metadata file exists, append the new metadata to it
+            if exists(animal_metadata_file_path):
+                # Get the animal metadata file
+                animal_metadata = pd.read_csv(animal_metadata_file_path, dtype="object")  # type: ignore
 
-            # Append the new metadata to the animal metadata file
-            animal_metadata = pd.concat(  # type: ignore
-                [
-                    animal_metadata,
-                    downloaded_recordings_metadata[
-                        downloaded_recordings_metadata["english_name"] == animal
-                    ],  # type: ignore
-                ],
-                ignore_index=True,
-            )
+                # Append the new metadata to the animal metadata file
+                animal_metadata = pd.concat(  # type: ignore
+                    [
+                        animal_metadata,
+                        downloaded_recordings_metadata[
+                            downloaded_recordings_metadata["english_name"] == animal
+                        ],  # type: ignore
+                    ],
+                    ignore_index=True,
+                )
+            else:
+                # If no previous metadata file exists, create a new dataframe
+                animal_metadata = downloaded_recordings_metadata[  # type: ignore
+                    downloaded_recordings_metadata["english_name"] == animal
+                ]
 
             # Temporarily set the recording_id column to be of type int64 for sorting
-            animal_metadata["recording_id"] = animal_metadata["recording_id"].astype(
+            animal_metadata["recording_id"] = animal_metadata["recording_id"].astype(  # type: ignore
                 np.int64
             )
 
@@ -208,12 +215,12 @@ class DownloadManager:
             animal_metadata = animal_metadata.sort_values(by=["recording_id"])  # type: ignore
 
             # Reset the recording_id column to be of type object
-            animal_metadata["recording_id"] = animal_metadata["recording_id"].astype(
+            animal_metadata["recording_id"] = animal_metadata["recording_id"].astype(  # type: ignore
                 "object"
             )
 
             # Update the animal metadata file
-            animal_metadata.to_csv(animal_metadata_file_path, index=False)
+            animal_metadata.to_csv(animal_metadata_file_path, index=False)  # type: ignore
 
     def _detect_already_downloaded_recordings(
         self, recordings: list[Recording]

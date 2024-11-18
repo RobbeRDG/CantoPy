@@ -385,6 +385,136 @@ def test_downloadmanager_update_animal_recordings_metadata_files(
         )
 
 
+@pytest.mark.parametrize(
+    "metadata_to_add_fixture_name",
+    [
+        ("spot_winged_wood_quail_full_test_recording_metadata"),
+        ("little_nightjar_full_test_recording_metadata"),
+        ("combined_full_test_recording_metadata"),
+    ],
+)
+def test_downloadmanager_update_animal_recordings_metadata_files_with_no_existing_metadata_file(
+    empty_data_folder_download_manager: DownloadManager,
+    metadata_to_add_fixture_name: str,
+    request: pytest.FixtureRequest,
+    spot_winged_wood_quail_full_test_recording_metadata: pd.DataFrame,
+    little_nightjar_full_test_recording_metadata: pd.DataFrame,
+):
+    """Test the metadata file update functionality of the DownloadManager class when no
+    previously generated metadata file is present.
+
+    This scenario happens the first time the metadata is generated for a specific animal.
+
+    Parameters
+    ----------
+    empty_data_folder_download_manager
+        DownloadManager instance set to an empty data folder.
+    metadata_to_add_fixture_name
+        Fixture name of the metadata to add to the recording metadata files that are
+        already present in the data folder of the DownloadManager instance.
+    request
+        Request fixture to get the metadata to add to the recording metadata files.
+    spot_winged_wood_quail_full_test_recording_metadata
+        Full test recording metadata for the spot-winged wood quail that should be
+        the result of an update operation that adds to the spot-winged wood quail
+        metadata.
+    little_nightjar_full_test_recording_metadata
+        Full test recording metadata for the little nightjar that should be
+        the result of an update operation that adds to the little nightjar
+        metadata.
+
+    """
+
+    to_add_test_recording_metadata: pd.DataFrame = request.getfixturevalue(
+        metadata_to_add_fixture_name
+    )
+
+    # Create the folders for the specific animal species, this should be done by a
+    # different method in the DownloadManager class, but we are simulating it here.
+    os.mkdir(
+        join(
+            empty_data_folder_download_manager.data_base_path, "spot_winged_wood_quail"
+        )
+    )
+    os.mkdir(join(empty_data_folder_download_manager.data_base_path, "little_nightjar"))
+
+    empty_data_folder_download_manager._update_animal_recordings_metadata_files(  # type: ignore
+        to_add_test_recording_metadata
+    )
+
+    if (
+        metadata_to_add_fixture_name
+        == "spot_winged_wood_quail_full_test_recording_metadata"
+    ):
+        pd.testing.assert_frame_equal(
+            spot_winged_wood_quail_full_test_recording_metadata,
+            pd.read_csv(  # type: ignore
+                join(
+                    empty_data_folder_download_manager.data_base_path,
+                    "spot_winged_wood_quail",
+                    "spot_winged_wood_quail_recording_metadata.csv",
+                ),
+                dtype="object",
+            ),
+        )
+
+        # Check that the little nightjar metadata has not been created
+        assert not os.path.exists(
+            join(
+                empty_data_folder_download_manager.data_base_path,
+                "little_nightjar",
+                "little_nightjar_recording_metadata.csv",
+            )
+        )
+
+    elif metadata_to_add_fixture_name == "little_nightjar_full_test_recording_metadata":
+        # Check that the spot-winged wood quail metadata has not been created
+        assert not os.path.exists(
+            join(
+                empty_data_folder_download_manager.data_base_path,
+                "spot_winged_wood_quail",
+                "spot_winged_wood_quail_recording_metadata.csv",
+            )
+        )
+
+        pd.testing.assert_frame_equal(
+            little_nightjar_full_test_recording_metadata,
+            pd.read_csv(  # type: ignore
+                join(
+                    empty_data_folder_download_manager.data_base_path,
+                    "little_nightjar",
+                    "little_nightjar_recording_metadata.csv",
+                ),
+                dtype="object",
+            ),
+        )
+
+    elif metadata_to_add_fixture_name == "combined_full_test_recording_metadata":
+        pd.testing.assert_frame_equal(
+            spot_winged_wood_quail_full_test_recording_metadata,
+            pd.read_csv(  # type: ignore
+                join(
+                    empty_data_folder_download_manager.data_base_path,
+                    "spot_winged_wood_quail",
+                    "spot_winged_wood_quail_recording_metadata.csv",
+                ),
+                dtype="object",
+            ),
+        )
+
+        pd.testing.assert_frame_equal(
+            little_nightjar_full_test_recording_metadata,
+            pd.read_csv(  # type: ignore
+                join(
+                    empty_data_folder_download_manager.data_base_path,
+                    "little_nightjar",
+                    "little_nightjar_recording_metadata.csv",
+                ),
+                dtype="object",
+            ),
+        )
+
+
 def test_downloadmanager_update_animal_recordings_metadata_files_for_empty_update(
     partially_filled_data_folder_download_manager: DownloadManager,
     spot_winged_wood_quail_partial_test_recording_metadata: pd.DataFrame,

@@ -328,7 +328,7 @@ def example_two_page_queryresult(
 ######################################################################
 
 
-@pytest.fixture
+@pytest.fixture()
 def empty_download_data_base_path() -> Generator[str, Any, Any]:
     """Logic for setting up and breaking down a new empty data folder.
 
