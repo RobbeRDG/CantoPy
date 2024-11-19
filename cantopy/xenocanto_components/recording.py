@@ -179,10 +179,10 @@ class Recording:
 
         row_data = pd.DataFrame(data)
 
-        # Replace empty strings with NaN
-        row_data = row_data.replace("", np.nan)  # type: ignore
-
         # Set all column data types to object
         row_data = row_data.astype("object")  # type: ignore
+
+        # Replace empty strings with NaN
+        row_data = row_data.mask(row_data == "", np.nan) # type: ignore
 
         return row_data

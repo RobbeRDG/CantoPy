@@ -207,7 +207,7 @@ class DownloadManager:
                 ]
 
             # Temporarily set the recording_id column to be of type int64 for sorting
-            animal_metadata["recording_id"] = animal_metadata["recording_id"].astype(  # type: ignore
+            animal_metadata.loc[:, "recording_id"] = animal_metadata["recording_id"].astype(  # type: ignore
                 np.int64
             )
 
